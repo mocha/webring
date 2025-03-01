@@ -1,0 +1,12 @@
+url: "https://cjlm.ca"
+name: "cjlm.ca"
+description: "Thoughts and notes and photography from cjlm"
+owner: "@cjlm"
+owner_type: "tabscord"
+color: "#012581"
+website_categories:
+    - "photography"
+    - "writing"
+    - "books"
+ringlets:
+    - "today_in_tabs"

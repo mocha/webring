@@ -1,0 +1,10 @@
+url: "https://test.com"
+name: "it's a website!"
+description: "I like my website. you should come see it."
+owner: "patrick@deuley.ltd"
+owner_type: "email"
+color: "#a6a81f"
+website_categories:
+  - "art"
+ringlets:
+

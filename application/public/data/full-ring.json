@@ -1,0 +1,89 @@
+{
+  "ringlets": {
+    "today_in_tabs": {
+      "name": "Tabscord",
+      "description": "Discord-friends of the Today in Tabs newsletter",
+      "url": "https://www.todayintabs.com/"
+    }
+  },
+  "websites": {
+    "https://buddy.com": {
+      "url": "https://buddy.com",
+      "name": "Let's be buddies!",
+      "description": "Buddy is a social network except only my friend named buddy can join",
+      "owner": "@buddy",
+      "owner_type": "tabscord",
+      "color": "#f03",
+      "website_categories": [
+        "private_club",
+        "fun_web_projects"
+      ]
+    },
+    "https://christie.fun": {
+      "url": "https://christie.fun",
+      "name": "Christie's Stuff",
+      "description": "Paintings and writing about UX and design",
+      "owner": "@clenneville",
+      "owner_type": "github",
+      "color": null,
+      "website_categories": [
+        "painting"
+      ],
+      "ringlets": null
+    },
+    "https://cjlm.ca": {
+      "url": "https://cjlm.ca",
+      "name": "cjlm.ca",
+      "description": "Thoughts and notes and photography from cjlm",
+      "owner": "@cjlm",
+      "owner_type": "tabscord",
+      "color": "#012581",
+      "website_categories": [
+        "photography",
+        "writing",
+        "books"
+      ],
+      "ringlets": [
+        "today_in_tabs"
+      ]
+    },
+    "https://colemancollins.com": {
+      "url": "https://colemancollins.com",
+      "name": "colemancollins.com",
+      "description": "Coleman's links",
+      "owner": "@colemanicewater",
+      "owner_type": "twitter",
+      "color": "#ff0",
+      "website_categories": [
+        "personal_links",
+        "fun_web_projects"
+      ]
+    },
+    "https://deuley.ltd": {
+      "url": "https://deuley.ltd",
+      "name": "deuley.ltd",
+      "owner": "@mocha",
+      "owner_type": "github",
+      "color": "#012581",
+      "website_categories": [
+        "personal_links",
+        "fun_web_projects"
+      ],
+      "ringlets": [
+        "today_in_tabs"
+      ]
+    },
+    "https://test.com": {
+      "url": "https://test.com",
+      "name": "it's a website!",
+      "description": "I like my website. you should come see it.",
+      "owner": "patrick@deuley.ltd",
+      "owner_type": "email",
+      "color": "#a6a81f",
+      "website_categories": [
+        "art"
+      ],
+      "ringlets": null
+    }
+  }
+}

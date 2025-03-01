@@ -1,0 +1,10 @@
+url: "https://christie.fun"
+name: "Christie's Stuff"
+description: "Paintings and writing about UX and design"
+owner: "@clenneville"
+owner_type: "github"
+color: #43dae5
+website_categories:
+  - "painting"
+ringlets:
+
