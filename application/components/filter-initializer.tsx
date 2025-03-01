@@ -13,6 +13,9 @@ export default function FilterInitializer() {
 
   // Initialize filters from URL parameters on component mount
   useEffect(() => {
+    // Skip during SSR/static generation
+    if (typeof window === 'undefined') return;
+    
     const categoryParam = searchParams.get("category")
     const ringletParam = searchParams.get("ringlet")
 
@@ -34,6 +37,9 @@ export default function FilterInitializer() {
 
   // Update URL when filters change
   useEffect(() => {
+    // Skip during SSR/static generation
+    if (typeof window === 'undefined') return;
+    
     console.log("Filter state changed:", { selectedCategory, selectedRinglet })
     
     // Create a new URLSearchParams instance

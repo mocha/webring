@@ -1,11 +1,14 @@
 import Link from "next/link"
+import { Suspense } from "react"
 import DirectoryTable from "@/components/directory-table"
 import FilterInitializer from "@/components/filter-initializer"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <FilterInitializer />
+      <Suspense fallback={null}>
+        <FilterInitializer />
+      </Suspense>
       
       <main className="flex-1 container mx-auto px-4 py-8">
         <section className="mb-8 text-center">
@@ -16,7 +19,9 @@ export default function HomePage() {
           </p>
         </section>
 
-        <DirectoryTable />
+        <Suspense fallback={<div className="text-center py-12">Loading directory...</div>}>
+          <DirectoryTable />
+        </Suspense>
 
         <div className="mt-12 text-center border-t border-border pt-8">
           <h2 className="text-2xl font-bold mb-4">Join the Webring</h2>
