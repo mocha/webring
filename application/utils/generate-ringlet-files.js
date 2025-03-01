@@ -43,18 +43,28 @@ try {
       const ringlet = fullRingData.ringlets[ringletId];
       console.log(`Processing ringlet: ${ringlet.name} (${ringletId})`);
       
+      // Create a new structure that includes both ringlet metadata and websites
+      const ringletData = {
+        // Include ringlet metadata
+        id: ringletId,
+        name: ringlet.name,
+        description: ringlet.description || '',
+        url: ringlet.url || '',
+        // Include websites in a nested object
+        websites: {}
+      };
+      
       // Filter websites to only those in this ringlet
-      const ringletWebsites = {};
       Object.entries(fullRingData.websites || {}).forEach(([url, site]) => {
         if (site.ringlets && site.ringlets.includes(ringletId)) {
-          ringletWebsites[url] = site;
+          ringletData.websites[url] = site;
         }
       });
       
       // Create the ringlet data file
       const ringletFilePath = path.join(dataDir, `${ringletId}.json`);
-      fs.writeFileSync(ringletFilePath, JSON.stringify(ringletWebsites, null, 2));
-      console.log(`Created ${ringletId}.json with ${Object.keys(ringletWebsites).length} websites`);
+      fs.writeFileSync(ringletFilePath, JSON.stringify(ringletData, null, 2));
+      console.log(`Created ${ringletId}.json with ringlet metadata and ${Object.keys(ringletData.websites).length} websites`);
     });
   } else {
     console.log('No ringlets found in full-ring.json');

@@ -12,6 +12,7 @@
     "generate-ringlet-files": "node utils/generate-ringlet-files.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "js-yaml": "^4.1.0",

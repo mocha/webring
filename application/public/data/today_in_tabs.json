@@ -1,32 +1,38 @@
 {
-  "https://cjlm.ca": {
-    "url": "https://cjlm.ca",
-    "name": "cjlm.ca",
-    "description": "Thoughts and notes and photography from cjlm",
-    "owner": "@cjlm",
-    "owner_type": "tabscord",
-    "color": "#012581",
-    "website_categories": [
-      "photography",
-      "writing",
-      "books"
-    ],
-    "ringlets": [
-      "today_in_tabs"
-    ]
-  },
-  "https://deuley.ltd": {
-    "url": "https://deuley.ltd",
-    "name": "deuley.ltd",
-    "owner": "@mocha",
-    "owner_type": "github",
-    "color": "#012581",
-    "website_categories": [
-      "personal_links",
-      "fun_web_projects"
-    ],
-    "ringlets": [
-      "today_in_tabs"
-    ]
+  "id": "today_in_tabs",
+  "name": "Tabscord",
+  "description": "Discord-friends of the Today in Tabs newsletter",
+  "url": "https://www.todayintabs.com/",
+  "websites": {
+    "https://cjlm.ca": {
+      "url": "https://cjlm.ca",
+      "name": "cjlm.ca",
+      "description": "Thoughts and notes and photography from cjlm",
+      "owner": "@cjlm",
+      "owner_type": "tabscord",
+      "color": "#012581",
+      "website_categories": [
+        "photography",
+        "writing",
+        "books"
+      ],
+      "ringlets": [
+        "today_in_tabs"
+      ]
+    },
+    "https://deuley.ltd": {
+      "url": "https://deuley.ltd",
+      "name": "deuley.ltd",
+      "owner": "@mocha",
+      "owner_type": "github",
+      "color": "#012581",
+      "website_categories": [
+        "personal_links",
+        "fun_web_projects"
+      ],
+      "ringlets": [
+        "today_in_tabs"
+      ]
+    }
   }
 }

@@ -1,7 +1,7 @@
 /**
  * Webring Widget
- * Add this to your site to participate in the webring navigation
- * Documentation: https://webring.fun/docs
+ * Add this to your site to participate in the webring!
+ * https://github.com/mocha/webring for more info
  */
 (function() {
   // Default configuration
@@ -25,6 +25,25 @@
   };
   
   /**
+   * Get icon HTML for navigation buttons
+   */
+  function getIconHtml(iconType) {
+    switch (iconType) {
+      case 'left':
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>';
+        
+      case 'random':
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M403.8 34.4c12-5 25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6l0-32-32 0c-10.1 0-19.6 4.7-25.6 12.8L284 229.3 244 176l31.2-41.6C293.3 110.2 321.8 96 352 96l32 0 0-32c0-12.9 7.8-24.6 19.8-29.6zM164 282.7L204 336l-31.2 41.6C154.7 401.8 126.2 416 96 416l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c10.1 0 19.6-4.7 25.6-12.8L164 282.7zm274.6 188c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6l0-32-32 0c-30.2 0-58.7-14.2-76.8-38.4L121.6 172.8c-6-8.1-15.5-12.8-25.6-12.8l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c30.2 0 58.7 14.2 76.8 38.4L326.4 339.2c6 8.1 15.5 12.8 25.6 12.8l32 0 0-32c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64z"/></svg>';
+        
+      case 'right':
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
+        
+      default:
+        return '';
+    }
+  }
+  
+  /**
    * Load the appropriate data file based on configuration
    */
   function loadWebringData() {
@@ -32,6 +51,9 @@
     const dataUrl = config.ringlet 
       ? `${config.baseUrl}/data/${config.ringlet}.json` 
       : `${config.baseUrl}/data/full-ring.json`;
+    
+    console.log(`Loading webring data from: ${dataUrl}`);
+    console.log(`Config: ringlet=${config.ringlet}, baseUrl=${config.baseUrl}`);
     
     fetch(dataUrl)
       .then(response => {
@@ -41,6 +63,7 @@
         return response.json();
       })
       .then(data => {
+        console.log('Webring data loaded:', data);
         renderWidget(data);
       })
       .catch(error => {
@@ -55,45 +78,82 @@
   function renderWidget(data) {
     // Get current site URL, stripping trailing slash for consistency
     const currentUrl = detectCurrentSiteUrl();
+    console.log(`Current URL detected as: ${currentUrl}`);
     
     // Process the data based on structure
     let websites = [];
-    let ringletName = config.ringlet ? null : "Webring.fun";
+    let ringletName = null;
+    let ringletDescription = null;
+    let ringletUrl = null;
+    
+    // Debug the structure of the data
+    console.log('Data structure received:', {
+      hasWebsites: !!data.websites,
+      hasId: !!data.id,
+      hasName: !!data.name,
+      hasRinglets: !!data.ringlets,
+      dataType: typeof data,
+      keysInData: Object.keys(data)
+    });
     
     // Handle different data formats
     if (data.websites) {
-      // Full ring format
-      websites = Object.values(data.websites);
+      // This could be either full ring format or individual ringlet with metadata
       
-      // If a ringlet is specified, filter to only that ringlet's sites
-      if (config.ringlet && data.ringlets && data.ringlets[config.ringlet]) {
-        ringletName = data.ringlets[config.ringlet].name;
-        websites = websites.filter(site => 
-          site.ringlets && site.ringlets.includes(config.ringlet)
-        );
+      // Check if this is a ringlet file with metadata (has id, name fields)
+      if (data.id && data.name) {
+        // This is a ringlet file with metadata
+        console.log(`Processing ringlet file with metadata: id=${data.id}, name=${data.name}`);
+        websites = Object.values(data.websites);
+        ringletName = data.name;
+        ringletDescription = data.description;
+        ringletUrl = data.url;
+        console.log(`Set ringlet metadata: name=${ringletName}, url=${ringletUrl}`);
+      } 
+      // Otherwise it's the full ring data
+      else {
+        console.log('Processing full ring data');
+        websites = Object.values(data.websites);
+        
+        // If a ringlet is specified in full ring data
+        if (config.ringlet && data.ringlets && data.ringlets[config.ringlet]) {
+          ringletName = data.ringlets[config.ringlet].name;
+          ringletDescription = data.ringlets[config.ringlet].description;
+          ringletUrl = data.ringlets[config.ringlet].url;
+          console.log(`Using ringlet from full ring: ${config.ringlet}, name=${ringletName}, url=${ringletUrl}`);
+          websites = websites.filter(site => 
+            site.ringlets && site.ringlets.includes(config.ringlet)
+          );
+        }
       }
     } else {
-      // Individual ringlet format
+      // Legacy format (flat object of websites)
+      console.log('Processing legacy format (flat object)');
       websites = Object.values(data);
       
       // Try to find ringlet name from the first site's ringlets info
       if (websites.length > 0 && websites[0].ringlets) {
         const ringletId = websites[0].ringlets[0];
         ringletName = ringletId.replace(/_/g, ' '); // Fallback formatting
+        console.log(`Using fallback ringlet name: ${ringletName}`);
       }
     }
     
+    // Log what we determined for debugging
+    console.log(`Final ringlet values: name=${ringletName}, url=${ringletUrl}, websites count=${websites.length}`);
+    
     // Find current site in the websites array
-    const currentSiteIndex = websites.findIndex(site => 
+    let currentSiteIndex = websites.findIndex(site => 
       site.url.replace(/\/$/, '') === currentUrl.replace(/\/$/, '')
     );
     
-    // If site not found, show a warning (could be misconfiguration)
+    // If site not found, pick a random position instead of showing error
+    // This allows for local testing and graceful handling of misconfiguration
     if (currentSiteIndex === -1) {
-      console.warn(`Webring widget: This site (${currentUrl}) is not in the ${ringletName || 'webring'}.`);
-      // Optional: render a special version of the widget for non-member sites
-      renderNonMemberWidget(websites, ringletName);
-      return;
+      console.warn(`Webring widget: This site (${currentUrl}) is not in the ${ringletName || 'webring'}. Using fallback mode.`);
+      
+      // Use a random position for better testing/fallback experience
+      currentSiteIndex = Math.floor(Math.random() * websites.length);
     }
     
     // Calculate previous and next sites
@@ -106,7 +166,11 @@
       : websites[0];
     
     // Create and insert the widget
-    createWidgetDOM(prevSite, nextSite, websites, ringletName);
+    createWidgetDOM(prevSite, nextSite, websites, {
+      name: ringletName,
+      description: ringletDescription,
+      url: ringletUrl
+    });
   }
   
   /**
@@ -124,41 +188,16 @@
   }
   
   /**
-   * Renders a special widget for sites not in the ring
-   */
-  function renderNonMemberWidget(websites, ringletName) {
-    const container = document.createElement('div');
-    container.id = 'webring-widget';
-    container.className = `webring-widget webring-widget-${config.colormode}`;
-    
-    container.innerHTML = `
-      <div class="webring-widget-content">
-        <span class="webring-widget-description">
-          <a href="${config.baseUrl}" target="_blank" rel="noopener">
-            Not a member of ${ringletName || 'the webring'}
-          </a>
-        </span>
-        <div class="webring-widget-nav">
-          <a href="${config.baseUrl}/join" class="webring-widget-button" target="_blank" rel="noopener">
-            Join
-          </a>
-        </div>
-      </div>
-    `;
-    
-    // Add styles and append to the document
-    addWidgetStyles();
-    document.body.appendChild(container);
-  }
-  
-  /**
    * Creates and inserts the widget DOM elements
    */
-  function createWidgetDOM(prevSite, nextSite, allSites, ringletName) {
+  function createWidgetDOM(prevSite, nextSite, allSites, ringlet) {
     // Create container
     const container = document.createElement('div');
     container.id = 'webring-widget';
     container.className = `webring-widget webring-widget-${config.colormode}`;
+    
+    // Debug the ringlet object being passed to createWidgetDOM
+    console.log('Creating widget DOM with ringlet:', ringlet);
     
     // Calculate a random site that's not the current one
     const getRandomSite = () => {
@@ -177,25 +216,31 @@
     // Prepare random site
     const randomSite = getRandomSite();
     
+    // Determine link URL - use ringlet URL if available, otherwise use base URL
+    const ringletUrl = ringlet.url || config.baseUrl;
+    const ringletName = ringlet.name || null;
+    
+    console.log(`Widget display values: ringletUrl=${ringletUrl}, ringletName=${ringletName}`);
+    
     // Create HTML
     container.innerHTML = `
       <div class="webring-widget-content">
         <span class="webring-widget-description">
-          <a href="${config.baseUrl}" target="_blank" rel="noopener">
-            Member of ${ringletName ? `the ${ringletName}` : 'webring.fun'}
+          🎉 This site is a member of ${ringletName ? `the` : ''} <a href="${ringletUrl}" target="_blank" rel="noopener">
+            ${ringletName ? `${ringletName} webring!` : 'webring.fun'}
           </a>
         </span>
         <nav class="webring-widget-nav">
           <a href="${prevSite.url}" class="webring-widget-button" title="Previous: ${prevSite.name}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            ${getIconHtml('left')}
             <span class="webring-sr-only">Previous site</span>
           </a>
           <a href="${randomSite.url}" class="webring-widget-button" title="Random: ${randomSite.name}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l4-4"></path><path d="M2 9l4 4"></path><path d="M18 9l4-4"></path><path d="M18 9l4 4"></path><path d="M9 22l3-3"></path><path d="M15 22l-3-3"></path><path d="M3 7h3a5 5 0 0 1 5 5 5 5 0 0 0 5 5h5"></path></svg>
+            ${getIconHtml('random')}
             <span class="webring-sr-only">Random site</span>
           </a>
           <a href="${nextSite.url}" class="webring-widget-button" title="Next: ${nextSite.name}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            ${getIconHtml('right')}
             <span class="webring-sr-only">Next site</span>
           </a>
         </nav>
@@ -280,6 +325,13 @@
         border-radius: 4px;
         background: transparent;
         transition: background-color 0.2s;
+      }
+      
+      .webring-widget-button svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        fill: currentColor;
       }
       
       .webring-widget-light .webring-widget-button:hover {
