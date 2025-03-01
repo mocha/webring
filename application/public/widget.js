@@ -9,7 +9,8 @@
     ringlet: null,
     colormode: "light",
     position: "bottom", // Could allow for other positions in the future
-    siteUrl: null // Allow users to specify their URL if auto-detection fails
+    siteUrl: null, // Allow users to specify their URL if auto-detection fails
+    baseUrl: "https://webring.fun" // Base URL for the webring site
   };
   
   // Initialize with user options
@@ -29,8 +30,8 @@
   function loadWebringData() {
     // Determine which data file to load
     const dataUrl = config.ringlet 
-      ? `https://webring.fun/data/${config.ringlet}.json` 
-      : 'https://webring.fun/data/full-ring.json';
+      ? `${config.baseUrl}/data/${config.ringlet}.json` 
+      : `${config.baseUrl}/data/full-ring.json`;
     
     fetch(dataUrl)
       .then(response => {
@@ -133,12 +134,12 @@
     container.innerHTML = `
       <div class="webring-widget-content">
         <span class="webring-widget-description">
-          <a href="https://webring.fun" target="_blank" rel="noopener">
+          <a href="${config.baseUrl}" target="_blank" rel="noopener">
             Not a member of ${ringletName || 'the webring'}
           </a>
         </span>
         <div class="webring-widget-nav">
-          <a href="https://webring.fun/join" class="webring-widget-button" target="_blank" rel="noopener">
+          <a href="${config.baseUrl}/join" class="webring-widget-button" target="_blank" rel="noopener">
             Join
           </a>
         </div>
@@ -180,7 +181,7 @@
     container.innerHTML = `
       <div class="webring-widget-content">
         <span class="webring-widget-description">
-          <a href="https://webring.fun" target="_blank" rel="noopener">
+          <a href="${config.baseUrl}" target="_blank" rel="noopener">
             Member of ${ringletName ? `the ${ringletName}` : 'webring.fun'}
           </a>
         </span>

@@ -2,6 +2,9 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { NextResponse } from 'next/server';
 
+// Note: This API route will only work in dev/server mode
+// In static export mode, the public/widget.js file will be served directly
+
 export async function GET() {
   // Read the widget.js file from the public directory
   const widgetJsPath = join(process.cwd(), 'public', 'widget.js');
@@ -12,6 +15,7 @@ export async function GET() {
     headers: {
       'Content-Type': 'application/javascript',
       'Cache-Control': 'public, max-age=86400', // Cache for 1 day
+      'Access-Control-Allow-Origin': '*', // Allow CORS
     },
   });
 }

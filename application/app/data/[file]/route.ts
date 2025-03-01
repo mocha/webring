@@ -2,6 +2,9 @@ import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { NextResponse } from 'next/server';
 
+// Note: This API route will only work in dev/server mode
+// In static export mode, the files in public/data/ will be served directly
+
 export async function GET(
   request: Request,
   { params }: { params: { file: string } }

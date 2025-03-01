@@ -78,6 +78,11 @@ export default function WidgetCode() {
         <pre className="bg-muted p-2 mt-1 rounded-lg overflow-x-auto text-xs">
           {`siteUrl: "https://your-exact-url.com",`}
         </pre>
+        
+        <p className="mt-2">If you're using a custom deployment or the widget isn't loading properly, you can set the <code>baseUrl</code> parameter:</p>
+        <pre className="bg-muted p-2 mt-1 rounded-lg overflow-x-auto text-xs">
+          {`baseUrl: "https://your-webring-installation.com",`}
+        </pre>
       </div>
     </div>
   )
