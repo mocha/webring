@@ -217,7 +217,7 @@
     const randomSite = getRandomSite();
     
     // Determine link URL - use ringlet URL if available, otherwise use base URL
-    const ringletUrl = ringlet.url || config.baseUrl;
+    const ringletUrl = ringlet.url || (config.ringlet ? `${config.baseUrl}/?ringlet=${config.ringlet}` : config.baseUrl);
     const ringletName = ringlet.name || null;
     
     console.log(`Widget display values: ringletUrl=${ringletUrl}, ringletName=${ringletName}`);

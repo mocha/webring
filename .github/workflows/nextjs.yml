@@ -75,7 +75,7 @@ jobs:
       - name: Run prebuild script 
         run: cd application && npm run prebuild
       - name: Build with Next.js
-        run: cd application && npm run build
+        run: cd application && npm run build:production
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -16,7 +16,7 @@ export default function ConnectedWidgetSection() {
     ? ringlets?.find(r => r.id === ringletId) || null
     : null;
 
-  const code = `<script src="https://webring.example.com/widget.js"></script>
+  const code = `<script src="https://webring.fun/widget.js"></script>
 <script>
   webring.init({
     ${ringletId ? `ringlet: "${ringletId}",\n    ` : ""}colormode: "${colorMode}"
@@ -33,8 +33,8 @@ export default function ConnectedWidgetSection() {
     <div className="space-y-8">
       {/* Widget Code Generator */}
       <div className="space-y-4">
-        <div className="flex gap-4 mb-4">
-          <div className="space-y-1 flex-1">
+        <div className="flex flex-wrap gap-4 mb-4">
+          <div className="space-y-1 flex-1 min-w-[200px]">
             <label htmlFor="ringlet" className="text-sm font-medium">
               Ringlet (optional)
             </label>
@@ -53,7 +53,7 @@ export default function ConnectedWidgetSection() {
             </select>
           </div>
 
-          <div className="space-y-1 flex-1">
+          <div className="space-y-1 flex-1 min-w-[200px]">
             <label htmlFor="colorMode" className="text-sm font-medium">
               Color Mode
             </label>
@@ -79,6 +79,15 @@ export default function ConnectedWidgetSection() {
             {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
           </button>
         </div>
+
+        {ringletId && (
+          <div className="p-3 bg-blue-50 text-blue-800 rounded-md text-sm">
+            <strong>New Feature:</strong> The ringlet name in the widget will now link directly 
+            to a filtered view of the directory showing only sites in this ringlet. 
+            You can also share links with URL parameters like <code>/?ringlet={ringletId}</code> 
+            or <code>/?category=personal</code>.
+          </div>
+        )}
       </div>
       
       {/* Widget Preview Section */}
@@ -93,7 +102,7 @@ export default function ConnectedWidgetSection() {
             id: selectedRinglet.id,
             name: selectedRinglet.name,
             url: selectedRinglet.link
-          } : null} 
+          } : null}
         />
       </div>
     </div>

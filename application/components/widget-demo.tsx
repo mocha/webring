@@ -12,13 +12,14 @@ interface WidgetDemoProps {
 }
 
 export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
-  // Use the ringlet's actual URL if available, otherwise fallback to a generic webring URL
-  const webringUrl = "https://webring.fun";
+  // Use the ringlet's URL if available, otherwise link to the directory with the ringlet filter
+  const webringUrl = ringlet?.url || (ringlet?.id ? `/?ringlet=${ringlet.id}` : "https://webring.fun");
+  const ringletName = ringlet?.name || null;
   
   return (
     <div className="space-y-4">
       <div
-        className={`border ${colorMode === "dark" ? "border-gray-700" : "border-gray-200"} rounded-lg overflow-hidden`}
+        className={`border ${colorMode === "dark" ? "border-gray-700" : "border-gray-200"} rounded-lg overflow-hidden relative`}
       >
         <div className="p-8 bg-background">
           <div className="h-32 bg-muted rounded flex items-center justify-center">
@@ -26,12 +27,14 @@ export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
           </div>
         </div>
 
+        {/* Widget preview that matches actual widget styling */}
         <div
-          className={`px-4 py-2 flex items-center justify-between text-sm ${colorMode === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"}`}
+          className={`px-4 py-2 flex items-center justify-between text-sm absolute bottom-0 left-0 right-0 ${colorMode === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-800"}`}
+          style={{ height: '40px', borderTop: colorMode === "dark" ? '1px solid #444' : '1px solid #e0e0e0' }}
         >
-          <span>
-            <a href={webringUrl} className="hover:underline">
-              Member of {ringlet ? `the ${ringlet.name}` : "webring.fun"}
+          <span className="webring-widget-description">
+            🎉 This site is a member of {ringletName ? 'the' : ''} <a href={webringUrl} className="hover:underline">
+              {ringletName ? `${ringletName} webring!` : 'webring.fun'}
             </a>
           </span>
           <div className="flex items-center gap-2">

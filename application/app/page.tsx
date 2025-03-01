@@ -1,10 +1,12 @@
 import Link from "next/link"
 import DirectoryTable from "@/components/directory-table"
-import FilterBar from "@/components/filter-bar"
+import FilterInitializer from "@/components/filter-initializer"
 
 export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
+      <FilterInitializer />
+      
       <main className="flex-1 container mx-auto px-4 py-8">
         <section className="mb-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Webring Directory</h1>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { ExternalLink, ChevronDown } from "lucide-react"
 import SiteDetailModal from "@/components/site-detail-modal"
 import { useSites } from "@/hooks/use-sites"
@@ -18,6 +18,11 @@ export default function DirectoryTable() {
   
   const isLoading = sitesLoading || categoriesLoading || ringletsLoading
   const error = sitesError || categoriesError || ringletsError
+
+  // Add debug logging for filter changes
+  useEffect(() => {
+    console.log("DirectoryTable - Current filter state:", { selectedCategory, selectedRinglet })
+  }, [selectedCategory, selectedRinglet]);
 
   const filteredSites = useMemo(() => {
     if (!sites) return []
@@ -43,6 +48,18 @@ export default function DirectoryTable() {
   if (isLoading) return <div className="text-center py-12">Loading directory...</div>
   if (error) return <div className="text-center py-12 text-red-500">Error loading directory</div>
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = e.target.value || null;
+    console.log("Category dropdown changed to:", newValue);
+    setCategory(newValue);
+  };
+
+  const handleRingletChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = e.target.value || null;
+    console.log("Ringlet dropdown changed to:", newValue);
+    setRinglet(newValue);
+  };
+
   return (
     <>
       {/* Filters */}
@@ -53,7 +70,7 @@ export default function DirectoryTable() {
             <div className="flex">
               <select
                 value={selectedCategory || ''}
-                onChange={(e) => setCategory(e.target.value || null)}
+                onChange={handleCategoryChange}
                 className="w-full p-2 border rounded-md border-input bg-background appearance-none pr-10"
               >
                 <option value="">All Categories</option>
@@ -74,7 +91,7 @@ export default function DirectoryTable() {
             <div className="flex">
               <select
                 value={selectedRinglet || ''}
-                onChange={(e) => setRinglet(e.target.value || null)}
+                onChange={handleRingletChange}
                 className="w-full p-2 border rounded-md border-input bg-background appearance-none pr-10"
               >
                 <option value="">All Ringlets</option>
