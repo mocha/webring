@@ -20,7 +20,7 @@ export default function WidgetPage() {
 
           <div className="mb-12">
             <h2 className="text-2xl font-semibold mb-4">Preview</h2>
-            <WidgetDemo />
+            <WidgetDemo colorMode="light" />
           </div>
 
           <div className="mb-12">

@@ -6,6 +6,7 @@
     "dev": "npm run prebuild && concurrently \"next dev\" \"chokidar '../directory/**/*.yaml' '../directory/**/*.yml' '../ringlets/**/*.yaml' '../ringlets/**/*.yml' -c 'npm run prebuild'\"",
     "prebuild": "node utils/prebuild.js && node utils/generate-ringlet-files.js",
     "build": "next build",
+    "build:production": "NEXT_DISABLE_ESLINT=1 next build",
     "start": "next start",
     "lint": "next lint",
     "generate-ringlet-files": "node utils/generate-ringlet-files.js"

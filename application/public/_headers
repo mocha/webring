@@ -1,0 +1,9 @@
+/data/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Cache-Control: public, max-age=86400
+
+/widget.js
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Cache-Control: public, max-age=86400 

@@ -92,7 +92,7 @@ export default function ConnectedWidgetSection() {
           ringlet={selectedRinglet ? {
             id: selectedRinglet.id,
             name: selectedRinglet.name,
-            url: selectedRinglet.url
+            url: selectedRinglet.link
           } : null} 
         />
       </div>
