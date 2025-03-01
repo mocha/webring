@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "npm run prebuild && concurrently \"next dev\" \"chokidar '../directory/**/*.yaml' '../directory/**/*.yml' '../ringlets/**/*.yaml' '../ringlets/**/*.yml' -c 'npm run prebuild'\"",
-    "prebuild": "node utils/prebuild.js && node scripts/generate-ringlet-files.js",
-    "build": "next build && next export",
+    "prebuild": "node utils/prebuild.js && node utils/generate-ringlet-files.js",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-ringlet-files": "node scripts/generate-ringlet-files.js"
+    "generate-ringlet-files": "node utils/generate-ringlet-files.js"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

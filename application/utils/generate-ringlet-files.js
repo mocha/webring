@@ -9,9 +9,9 @@
 const fs = require('fs');
 const path = require('path');
 
-// Paths
-const fullRingPath = path.join(__dirname, '../application/public/data/full-ring.json');
-const dataDir = path.join(__dirname, '../application/public/data');
+// Paths - adjusted for being inside application/utils
+const fullRingPath = path.join(__dirname, '../public/data/full-ring.json');
+const dataDir = path.join(__dirname, '../public/data');
 
 // Ensure the data directory exists
 if (!fs.existsSync(dataDir)) {

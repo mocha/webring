@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: Deploy Next.js site to Pages
+name: Deploy to pages!
 
 on:
   # Runs on pushes targeting the default branch
@@ -22,7 +22,7 @@ permissions:
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   # Build job
@@ -31,6 +31,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+      - name: Create required directories
+        run: |
+          mkdir -p directory ringlets
+          touch directory/.gitkeep
+          touch ringlets/.gitkeep
       - name: Detect package manager
         id: detect-package-manager
         run: 
@@ -63,6 +70,8 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: cd application && npm install
+      - name: Create data directories
+        run: mkdir -p application/public/data
       - name: Run prebuild script 
         run: cd application && npm run prebuild
       - name: Build with Next.js

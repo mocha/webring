@@ -2,14 +2,19 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
+// Determine if we're running in GitHub Actions by checking for the GITHUB_ACTIONS environment variable
+const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
+
+// Set paths based on where the script is running
 const DIRECTORY_PATH = path.join(__dirname, '../../directory');
 const RINGLETS_PATH = path.join(__dirname, '../../ringlets');
 const OUTPUT_DIR = path.join(__dirname, '../public/data');
-const RINGLET_OUTPUT_DIR = path.join(__dirname, '../public');
+const RINGLET_OUTPUT_DIR = path.join(__dirname, '../public/data');
 
 // Ensure output directories exist
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+  console.log(`Created output directory: ${OUTPUT_DIR}`);
 }
 
 /**
@@ -28,6 +33,11 @@ function ensureUrlProtocol(url) {
  * @returns {Array<Object>} - Array of file contents and metadata
  */
 function readYamlFilesRecursively(dir) {
+  if (!fs.existsSync(dir)) {
+    console.warn(`Directory does not exist: ${dir}`);
+    return [];
+  }
+
   const results = [];
   const files = fs.readdirSync(dir, { withFileTypes: true });
 
@@ -107,7 +117,6 @@ function main() {
   fs.writeFileSync(fullRingPath, JSON.stringify(fullRingData, null, 2));
   console.log(`Created full ring data at ${fullRingPath}`);
   
-  // 4. Create individual JSON files for each ringlet
   console.log('Creating individual ringlet files...');
   
   for (const [ringletId, ringlet] of Object.entries(ringlets)) {
