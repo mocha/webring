@@ -16,11 +16,7 @@
     opacity: 1, // Opacity value from 0.2 to 1
     slide_out: false, // Whether widget should slide out after a delay
     full_width: false, // For static widget: whether it should take full width
-    extra_details: true, // For static widget: whether to show detailed info
-    auto_hide: false, // Whether widget should auto-hide after a delay
-    hide_delay: 3000, // Delay in milliseconds before auto-hide
-    static_position: null, // For static widget: position
-    fixed_position: false // For static widget: whether it's fixed-positioned
+    extra_details: true // For static widget: whether to show detailed info
   };
   
   // Initialize with user options
@@ -42,67 +38,36 @@
   };
   
   /**
-   * Validates and normalizes the configuration
+   * Validate configuration values
    */
   function validateConfig() {
-    // Set defaults for any unspecified options
-    const defaults = {
-      type: 'bar',
-      position: 'bottom',
-      color: "#000000",
-      opacity: 0.85,
-      siteUrl: null,
-      ringlet: null,
-      slide_out: false,
-      full_width: false,
-      extra_details: true,
-      auto_hide: false,
-      hide_delay: 3000,
-      static_position: 'inline',
-      fixed_position: false
-    };
-    
-    // Apply defaults for any unspecified options
-    for (const [key, value] of Object.entries(defaults)) {
-      if (config[key] === undefined) {
-        config[key] = value;
-      }
+    // Validate widget type
+    if (!["bar", "box", "static"].includes(config.type)) {
+      console.warn(`Invalid widget type: ${config.type}. Defaulting to "bar".`);
+      config.type = "bar";
     }
     
-    // Validate type
-    if (!['bar', 'box', 'static'].includes(config.type)) {
-      console.warn(`Invalid widget type "${config.type}", defaulting to "bar"`);
-      config.type = 'bar';
-    }
-    
-    // Validate position based on type
-    if (config.type === 'bar' && !['top', 'bottom'].includes(config.position)) {
-      console.warn(`Invalid position "${config.position}" for bar widget, defaulting to "bottom"`);
-      config.position = 'bottom';
-    } else if (config.type === 'box' && !['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(config.position)) {
-      console.warn(`Invalid position "${config.position}" for box widget, defaulting to "bottom-right"`);
-      config.position = 'bottom-right';
-    } else if (config.type === 'static') {
-      // For static widget, validate static_position and fixed_position
-      if (config.fixed_position && !['top', 'bottom'].includes(config.static_position)) {
-        console.warn(`Invalid static_position "${config.static_position}" for fixed static widget, defaulting to "bottom"`);
-        config.static_position = 'bottom';
-      }
-    }
-    
-    // Validate color
-    if (typeof config.color !== 'string' || !config.color.match(/^#[0-9A-Fa-f]{6}$/)) {
-      console.warn(`Invalid color "${config.color}", defaulting to "#000000"`);
-      config.color = "#000000";
+    // Validate position based on widget type
+    if (config.type === "bar" && !["top", "bottom"].includes(config.position)) {
+      console.warn(`Invalid position for bar widget: ${config.position}. Defaulting to "bottom".`);
+      config.position = "bottom";
+    } else if (config.type === "box" && 
+      !["top", "bottom", "left", "right", "top-left", "top-right", "bottom-left", "bottom-right"].includes(config.position)) {
+      console.warn(`Invalid position for box widget: ${config.position}. Defaulting to "bottom-right".`);
+      config.position = "bottom-right";
     }
     
     // Validate opacity
-    if (typeof config.opacity !== 'number' || config.opacity < 0 || config.opacity > 1) {
-      console.warn(`Invalid opacity "${config.opacity}", defaulting to 0.85`);
-      config.opacity = 0.85;
+    if (typeof config.opacity !== "number" || config.opacity < 0.2 || config.opacity > 1) {
+      console.warn(`Invalid opacity value: ${config.opacity}. Must be between 0.2 and 1. Defaulting to 1.`);
+      config.opacity = 1;
     }
     
-    return config;
+    // Validate color if provided
+    if (config.color && !/^#[0-9A-F]{6}$/i.test(config.color)) {
+      console.warn(`Invalid color format: ${config.color}. Must be a valid hex color (e.g., #FF5500). Ignoring.`);
+      config.color = null;
+    }
   }
   
   /**
@@ -347,6 +312,8 @@
     container.id = 'webring-widget';
     container.className = `webring-widget webring-widget-bar`;
     
+    console.log('DEBUG: Creating widget container element', container);
+    
     // Debug the ringlet object being passed to createWidgetDOM
     console.log('Creating bar widget DOM with ringlet:', ringlet);
     
@@ -390,6 +357,8 @@
     // Determine text color based on background color
     const textColor = getTextColorForBackground(siteColor);
     
+    console.log('DEBUG: Widget styles', { backgroundColor: siteColor, textColor, position: config.position });
+    
     // Create HTML
     container.innerHTML = `
       <div class="webring-widget-content">
@@ -415,140 +384,29 @@
       </div>
     `;
     
+    console.log('DEBUG: Container HTML set', container.innerHTML.substring(0, 100) + '...');
+    
     // Add styles with dynamic colors
     addBarWidgetStyles(siteColor, textColor);
     
-    // Add to the document
-    document.body.appendChild(container);
+    console.log('DEBUG: Before appending to document.body', {
+      bodyExists: !!document.body,
+      bodyChildCount: document.body ? document.body.childNodes.length : 'N/A'
+    });
     
-    // Always make the widget visible initially
-    container.classList.add('webring-widget-visible');
+    try {
+      // Add to the document
+      document.body.appendChild(container);
+      console.log('DEBUG: Widget successfully appended to document.body');
+    } catch (error) {
+      console.error('DEBUG: Error appending widget to body:', error);
+    }
     
     // Add slide out functionality if enabled
     if (config.slide_out) {
+      console.log('DEBUG: Setting up slide out');
       setupSlideOut(container);
     }
-    
-    // Add space to the page if widget is at the top
-    if (config.position === 'top') {
-      adjustPageForTopWidget(container);
-    }
-  }
-  
-  /**
-   * Adds the necessary CSS for the bar widget
-   */
-  function addBarWidgetStyles(backgroundColor, textColor) {
-    // Check if styles are already added
-    if (document.getElementById('webring-styles')) {
-      return;
-    }
-    
-    // Calculate hover background based on text color
-    const hoverBackground = textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)";
-    
-    // Create style element
-    const styleEl = document.createElement('style');
-    styleEl.id = 'webring-styles';
-    
-    // Define CSS
-    styleEl.textContent = `
-      .webring-widget-bar {
-        position: fixed;
-        left: 0;
-        right: 0;
-        ${config.position === 'top' ? 'top: 0; border-bottom: 1px solid' : 'bottom: 0; border-top: 1px solid'};
-        z-index: 9999;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-        background-color: ${backgroundColor};
-        opacity: ${config.opacity};
-        color: ${textColor};
-        border-color: ${textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.2)"};
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        transform: translateY(0); /* Visible by default */
-      }
-      
-      .webring-widget-bar.webring-widget-visible {
-        transform: translateY(0);
-      }
-      
-      .webring-widget-bar:not(.webring-widget-visible) {
-        transform: ${config.position === 'top' ? 'translateY(-100%)' : 'translateY(100%)'};
-      }
-      
-      .webring-widget-bar:hover {
-        opacity: 1;
-      }
-      
-      .webring-widget-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 40px;
-      }
-      
-      .webring-widget a {
-        color: inherit;
-        text-decoration: none;
-      }
-      
-      .webring-widget-description a:hover {
-        text-decoration: underline;
-      }
-      
-      .webring-widget-nav {
-        display: flex;
-        gap: 8px;
-      }
-      
-      .webring-widget-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 4px;
-        background: transparent;
-        transition: background-color 0.2s;
-      }
-      
-      .webring-widget-button svg {
-        width: 16px;
-        height: 16px;
-        flex-shrink: 0;
-        fill: currentColor;
-      }
-      
-      .webring-widget-button:hover {
-        background-color: ${hoverBackground};
-      }
-      
-      .webring-sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-      }
-      
-      @media (max-width: 600px) {
-        .webring-widget-description {
-          font-size: 12px;
-        }
-      }
-    `;
-    
-    // Add to document head
-    document.head.appendChild(styleEl);
   }
   
   /**
@@ -623,139 +481,10 @@
     // Add to the document
     document.body.appendChild(container);
     
-    // Always make the widget visible initially
-    container.classList.add('webring-widget-visible');
-    
     // Add slide out functionality if enabled
     if (config.slide_out) {
       setupSlideOut(container);
     }
-    
-    // Add space to the page if widget is at top positions
-    if (config.position === 'top-left' || config.position === 'top-right') {
-      adjustPageForTopWidget(container);
-    }
-  }
-  
-  /**
-   * Adds the necessary CSS for the box widget
-   */
-  function addBoxWidgetStyles(backgroundColor, textColor) {
-    // Check if styles are already added
-    if (document.getElementById('webring-styles')) {
-      return;
-    }
-    
-    // Calculate hover background based on text color
-    const hoverBackground = textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)";
-    
-    // Create style element
-    const styleEl = document.createElement('style');
-    styleEl.id = 'webring-styles';
-    
-    // Define CSS
-    styleEl.textContent = `
-      .webring-widget-box {
-        position: fixed;
-        ${config.position === 'top-right' ? 'top: 20px; right: 20px;' : 
-          config.position === 'top-left' ? 'top: 20px; left: 20px;' : 
-          config.position === 'bottom-left' ? 'bottom: 20px; left: 20px;' : 'bottom: 20px; right: 20px;'
-        }
-        z-index: 9999;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-        background-color: ${backgroundColor};
-        color: ${textColor};
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        width: 220px;
-        opacity: ${config.opacity};
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        transform: translateY(0); /* Visible by default */
-      }
-      
-      .webring-widget-box.webring-widget-visible {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      
-      .webring-widget-box:not(.webring-widget-visible) {
-        transform: translateY(10px);
-        opacity: 0;
-      }
-      
-      .webring-widget-box .webring-widget-content {
-        padding: 12px;
-      }
-      
-      .webring-widget-box .webring-widget-description {
-        display: block;
-        margin-bottom: 10px;
-        text-align: center;
-      }
-      
-      .webring-widget a {
-        color: inherit;
-        text-decoration: none;
-      }
-      
-      .webring-widget-description a:hover {
-        text-decoration: underline;
-      }
-      
-      .webring-widget-box .webring-widget-nav {
-        display: flex;
-        justify-content: space-between;
-      }
-      
-      .webring-widget-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: 4px;
-        background: transparent;
-        transition: background-color 0.2s;
-      }
-      
-      .webring-widget-button svg {
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
-        fill: currentColor;
-      }
-      
-      .webring-widget-button:hover {
-        background-color: ${hoverBackground};
-      }
-      
-      .webring-sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-      }
-      
-      @media (max-width: 600px) {
-        .webring-widget-box {
-          width: 180px;
-        }
-        
-        .webring-widget-description {
-          font-size: 12px;
-        }
-      }
-    `;
-    
-    // Add to document head
-    document.head.appendChild(styleEl);
   }
   
   /**
@@ -855,263 +584,3 @@
       `;
     } else {
       container.innerHTML = `
-        <div class="webring-widget-static-content">
-          <div class="webring-widget-static-header">
-            <h3 class="webring-widget-static-title">
-              Member of <a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>
-            </h3>
-          </div>
-          <div class="webring-widget-static-simple-nav">
-            <a href="${prevSite.url}" class="webring-widget-static-simple-button" title="Previous: ${prevSite.name}">← Prev</a>
-            <a href="${randomSite.url}" class="webring-widget-static-simple-button" title="Random: ${randomSite.name}">Random</a>
-            <a href="${nextSite.url}" class="webring-widget-static-simple-button" title="Next: ${nextSite.name}">Next →</a>
-          </div>
-        </div>
-      `;
-    }
-    
-    // Add styles with dynamic colors
-    addStaticWidgetStyles(siteColor, textColor);
-    
-    // Add to the document
-    document.body.appendChild(container);
-    
-    // Always make the widget visible initially
-    container.classList.add('webring-widget-visible');
-    
-    // Add slide out functionality if enabled
-    if (config.slide_out) {
-      setupSlideOut(container);
-    }
-    
-    // If the static widget is fixed-positioned at the top, add space
-    if (config.static_position === 'top' && config.fixed_position) {
-      adjustPageForTopWidget(container);
-    }
-  }
-  
-  /**
-   * Sets up the slide-out functionality for widgets
-   * This is responsible for adding the webring-widget-visible class
-   */
-  function setupSlideOut(container) {
-    // The widget is already visible by default now
-    // We only use this function for auto-hide behavior
-    
-    // For auto-hide functionality (if enabled)
-    if (config.auto_hide) {
-      let timer = null;
-      const hideWidget = () => {
-        container.classList.remove('webring-widget-visible');
-      };
-      
-      const showWidget = () => {
-        container.classList.add('webring-widget-visible');
-        
-        // Reset timer
-        if (timer) clearTimeout(timer);
-        
-        // Set new timer for hiding
-        timer = setTimeout(hideWidget, config.hide_delay || 3000);
-      };
-      
-      // Initially hide after delay
-      timer = setTimeout(hideWidget, config.hide_delay || 3000);
-      
-      // Show on hover or scroll
-      container.addEventListener('mouseenter', showWidget);
-      window.addEventListener('scroll', showWidget, { passive: true });
-    }
-  }
-
-  /**
-   * Adds the necessary CSS for the static widget
-   */
-  function addStaticWidgetStyles(backgroundColor, textColor) {
-    // Check if styles are already added
-    if (document.getElementById('webring-styles')) {
-      return;
-    }
-    
-    // Calculate accent colors
-    const hoverBackground = textColor === "black" ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.1)";
-    const borderColor = textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.2)";
-    
-    // Create style element
-    const styleEl = document.createElement('style');
-    styleEl.id = 'webring-styles';
-    
-    // Fixed position CSS
-    const fixedPositionCSS = config.fixed_position ? `
-      position: fixed;
-      ${config.static_position === 'top' ? 'top: 0;' : 'bottom: 0;'}
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      border-radius: 0;
-      ${config.static_position === 'top' ? 'border-top: none; border-left: none; border-right: none;' : 'border-bottom: none; border-left: none; border-right: none;'}
-      margin: 0;
-    ` : '';
-    
-    // Define CSS
-    styleEl.textContent = `
-      .webring-widget-static {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-        color: ${textColor};
-        border: 1px solid ${borderColor};
-        border-radius: 8px;
-        background-color: ${backgroundColor};
-        margin: 20px 0;
-        overflow: hidden;
-        ${fixedPositionCSS}
-      }
-      
-      .webring-widget-full-width {
-        width: 100%;
-      }
-      
-      .webring-widget-static a {
-        color: ${textColor};
-        text-decoration: none;
-      }
-      
-      .webring-widget-static-content {
-        padding: 16px;
-      }
-      
-      .webring-widget-static-header {
-        margin-bottom: 12px;
-        text-align: center;
-      }
-      
-      .webring-widget-static-title {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-      }
-      
-      .webring-widget-static-title a:hover {
-        text-decoration: underline;
-      }
-      
-      .webring-widget-static-sites {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-      }
-      
-      .webring-widget-static-site {
-        flex: 1;
-        min-width: 200px;
-        padding: 12px;
-        border-radius: 6px;
-        background-color: ${hoverBackground};
-      }
-      
-      .webring-widget-static-label {
-        display: block;
-        font-size: 12px;
-        margin-bottom: 4px;
-        opacity: 0.8;
-      }
-      
-      .webring-widget-static-link {
-        display: block;
-      }
-      
-      .webring-widget-static-link strong {
-        display: block;
-        margin-bottom: 2px;
-      }
-      
-      .webring-widget-static-description {
-        display: block;
-        font-size: 12px;
-        opacity: 0.8;
-      }
-      
-      .webring-widget-static-simple-nav {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-      }
-      
-      .webring-widget-static-simple-button {
-        padding: 6px 12px;
-        border-radius: 4px;
-        background-color: ${hoverBackground};
-        transition: opacity 0.2s;
-      }
-      
-      .webring-widget-static-simple-button:hover {
-        opacity: 0.8;
-      }
-      
-      @media (max-width: 600px) {
-        .webring-widget-static-sites {
-          flex-direction: column;
-        }
-      }
-    `;
-    
-    // Add to document head
-    document.head.appendChild(styleEl);
-  }
-  
-  /**
-   * Adds space to the top of the page to prevent content from being hidden under the widget
-   */
-  function adjustPageForTopWidget(widgetElement) {
-    // Get the height of the widget
-    let widgetHeight = widgetElement.offsetHeight;
-    
-    // Create a style element if it doesn't exist
-    let spacerStyle = document.getElementById('webring-spacer-style');
-    if (!spacerStyle) {
-      spacerStyle = document.createElement('style');
-      spacerStyle.id = 'webring-spacer-style';
-      document.head.appendChild(spacerStyle);
-    }
-    
-    // Set the body padding to match widget height
-    spacerStyle.textContent = `
-      body {
-        padding-top: ${widgetHeight}px !important;
-      }
-    `;
-    
-    // Set up a resize observer to adjust the padding if widget size changes
-    if (window.ResizeObserver) {
-      const resizeObserver = new ResizeObserver(entries => {
-        for (const entry of entries) {
-          if (entry.target === widgetElement) {
-            const newHeight = entry.contentRect.height;
-            spacerStyle.textContent = `
-              body {
-                padding-top: ${newHeight}px !important;
-              }
-            `;
-          }
-        }
-      });
-      
-      resizeObserver.observe(widgetElement);
-    }
-    
-    // Fallback for browsers without ResizeObserver - listen for window resize
-    else {
-      const updatePadding = () => {
-        const newHeight = widgetElement.offsetHeight;
-        spacerStyle.textContent = `
-          body {
-            padding-top: ${newHeight}px !important;
-          }
-        `;
-      };
-      
-      window.addEventListener('resize', updatePadding);
-    }
-  }
-})();

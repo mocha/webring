@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * This script reads the full-ring.json file and generates individual JSON files
+ * This script reads the all.json file and generates individual JSON files
  * for each ringlet. These files are used by the webring widget to navigate
  * through ringlet-specific site collections.
  */
@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Paths - adjusted for being inside application/utils
-const fullRingPath = path.join(__dirname, '../public/data/full-ring.json');
+const fullRingPath = path.join(__dirname, '../public/data/all.json');
 const dataDir = path.join(__dirname, '../public/data');
 
 // Ensure the data directory exists
@@ -19,18 +19,18 @@ if (!fs.existsSync(dataDir)) {
   console.log(`Created data directory at ${dataDir}`);
 }
 
-// Check if full-ring.json exists
+// Check if all.json exists
 if (!fs.existsSync(fullRingPath)) {
-  console.log('Warning: full-ring.json does not exist yet. Skipping ringlet generation.');
-  // Create an empty full-ring.json file if it doesn't exist
+  console.log('Warning: all.json does not exist yet. Skipping ringlet generation.');
+  // Create an empty all.json file if it doesn't exist
   const emptyData = { ringlets: {}, websites: {} };
   fs.writeFileSync(fullRingPath, JSON.stringify(emptyData, null, 2));
-  console.log(`Created empty full-ring.json file at ${fullRingPath}`);
+  console.log(`Created empty all.json file at ${fullRingPath}`);
   process.exit(0);
 }
 
-// Read the full-ring.json file
-console.log('Reading full-ring.json...');
+// Read the all.json file
+console.log('Reading all.json...');
 try {
   const fullRingData = JSON.parse(fs.readFileSync(fullRingPath, 'utf8'));
 
@@ -67,11 +67,11 @@ try {
       console.log(`Created ${ringletId}.json with ringlet metadata and ${Object.keys(ringletData.websites).length} websites`);
     });
   } else {
-    console.log('No ringlets found in full-ring.json');
+    console.log('No ringlets found in all.json');
   }
   
   console.log('Done generating ringlet files!');
 } catch (error) {
-  console.error('Error processing full-ring.json:', error);
+  console.error('Error processing all.json:', error);
   process.exit(1);
 } 

@@ -11,7 +11,7 @@ export function useCategories() {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        // Fetch categories from our updated data module that reads from full-ring.json
+        // Fetch categories from our updated data module that reads from all.json
         const { getAllCategories } = await import("@/lib/data")
         const data = await getAllCategories()
         setCategories(data)
@@ -36,7 +36,7 @@ export function useRinglets() {
   useEffect(() => {
     async function fetchRinglets() {
       try {
-        // Fetch ringlets from our updated data module that reads from full-ring.json
+        // Fetch ringlets from our updated data module that reads from all.json
         const { getRinglets } = await import("@/lib/data")
         const data = await getRinglets()
         setRinglets(data)

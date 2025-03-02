@@ -11,7 +11,7 @@ export function useSites() {
   useEffect(() => {
     async function fetchSites() {
       try {
-        // Fetch sites from our updated data module that reads from full-ring.json
+        // Fetch sites from our updated data module that reads from all.json
         const { getSites } = await import("@/lib/data")
         const data = await getSites()
         setSites(data)

@@ -10,7 +10,7 @@ interface RingData {
 async function fetchRingData(): Promise<RingData> {
   try {
     // Fetch the data from the JSON file
-    const response = await fetch('/data/full-ring.json', { 
+    const response = await fetch('/data/all.json', { 
       // Add cache: 'no-store' to avoid caching during development
       cache: process.env.NODE_ENV === 'development' ? 'no-store' : 'default'
     });

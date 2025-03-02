@@ -107,13 +107,13 @@ function main() {
   
   console.log(`Successfully read ${Object.keys(websites).length} websites`);
   
-  // 3. Create full-ring.json with both dictionaries
+  // 3. Create all.json with both dictionaries
   const fullRingData = {
     ringlets,
     websites
   };
   
-  const fullRingPath = path.join(OUTPUT_DIR, 'full-ring.json');
+  const fullRingPath = path.join(OUTPUT_DIR, 'all.json');
   fs.writeFileSync(fullRingPath, JSON.stringify(fullRingData, null, 2));
   console.log(`Created full ring data at ${fullRingPath}`);
   

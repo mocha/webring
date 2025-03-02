@@ -22,13 +22,6 @@ export default function ConnectedWidgetSection() {
     ${ringletId ? `ringlet: "${ringletId}",\n    ` : ""}colormode: "${colorMode}"
   });
 </script>
-
-<!-- 
-Ringlet Link Behavior:
-1. No ringlet specified: "This site is a member of webring.fun!"
-2. Ringlet specified without URL: "This site is a member of the {ringlet.name} webring!" → links to webring.fun/?ringlet={id}
-3. Ringlet with URL: "This site is a member of the {ringlet.name} webring!" → links to the ringlet's URL
--->
 `
 
   const copyToClipboard = () => {
