@@ -23,19 +23,6 @@
         "today_in_tabs"
       ]
     },
-    "https://colemancollins.com": {
-      "url": "https://colemancollins.com",
-      "name": "Coleman Collins",
-      "description": "Coleman's links",
-      "owner": "@colemanicewater",
-      "owner_type": "twitter",
-      "color": "#ff0",
-      "website_categories": [
-        "personal_links",
-        "fun_web_projects",
-        "trivia"
-      ]
-    },
     "https://deuley.ltd": {
       "url": "https://deuley.ltd",
       "name": "Deuley.ltd",
@@ -44,9 +31,7 @@
       "color": "#e5067d",
       "website_categories": [
         "personal_links",
-        "fun_web_projects",
-        "technology",
-        "space"
+        "fun_web_projects"
       ],
       "ringlets": [
         "today_in_tabs"

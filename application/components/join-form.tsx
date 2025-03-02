@@ -150,7 +150,7 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
 
         <div className="space-y-2">
           <label htmlFor="color" className="block text-lg font-medium">
-            Color
+            Color Theme
           </label>
           <div className="flex items-center space-x-2">
             <input
@@ -171,7 +171,8 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
               placeholder="#RRGGBB"
             />
           </div>
-        </div>
+          <p className="text-xs text-muted-foreground">What color theme shall we use to style the card in the directory and site's widget?</p>
+          </div>
       </div>
 
       <div className="space-y-2">
