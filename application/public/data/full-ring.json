@@ -1,6 +1,6 @@
 {
   "ringlets": {
-    "today_in_tabs": {
+    "today-in-tabs": {
       "name": "Tabscord",
       "description": "Discord-friends of the Today in Tabs newsletter",
       "url": "https://www.todayintabs.com/"
@@ -69,7 +69,7 @@
         "data"
       ],
       "ringlets": [
-        "today_in_tabs"
+        "today-in-tabs"
       ]
     }
   }
