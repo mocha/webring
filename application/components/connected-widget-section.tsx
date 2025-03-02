@@ -105,7 +105,7 @@ Ringlet Link Behavior:
           ringlet={selectedRinglet ? {
             id: selectedRinglet.id,
             name: selectedRinglet.name,
-            url: selectedRinglet.link
+            url: selectedRinglet.url
           } : null}
         />
       </div>

@@ -13,6 +13,6 @@ export interface Ringlet {
   id: string
   name: string
   description?: string
-  link?: string
+  url?: string
 }
 

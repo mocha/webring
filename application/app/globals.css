@@ -60,3 +60,8 @@ tr:hover {
   box-shadow: inset 4px 0 0 var(--hover-color);
 }
 
+.text-4xl, .text-6xl {
+  letter-spacing: -.1rem;
+}
+
+

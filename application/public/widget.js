@@ -43,6 +43,49 @@
     }
   }
   
+  // Color utility functions
+  /**
+   * Check if a color is light or dark
+   */
+  function isColorLight(hexColor) {
+    // Convert hex to RGB
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+    
+    // Calculate luminance
+    // Formula: 0.299*R + 0.587*G + 0.114*B
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    
+    // Consider light if luminance is greater than 0.5
+    return luminance > 0.5;
+  }
+  
+  /**
+   * Darken a color for hover states
+   */
+  function darkenColor(hexColor) {
+    // Convert hex to RGB
+    let r = parseInt(hexColor.slice(1, 3), 16);
+    let g = parseInt(hexColor.slice(3, 5), 16);
+    let b = parseInt(hexColor.slice(5, 7), 16);
+    
+    // Darken by 10%
+    r = Math.max(0, Math.floor(r * 0.9));
+    g = Math.max(0, Math.floor(g * 0.9));
+    b = Math.max(0, Math.floor(b * 0.9));
+    
+    // Convert back to hex
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+  }
+  
+  /**
+   * Get appropriate text color (black or white) for a background color
+   */
+  function getTextColorForBackground(hexColor) {
+    return isColorLight(hexColor) ? "black" : "white";
+  }
+  
   /**
    * Load the appropriate data file based on configuration
    */
@@ -85,6 +128,7 @@
     let ringletName = null;
     let ringletDescription = null;
     let ringletUrl = null;
+    let currentSiteColor = "#666666"; // Default color if none is found
     
     // Debug the structure of the data
     console.log('Data structure received:', {
@@ -154,6 +198,12 @@
       
       // Use a random position for better testing/fallback experience
       currentSiteIndex = Math.floor(Math.random() * websites.length);
+    } else {
+      // Get the color of the current site if available
+      if (websites[currentSiteIndex].color) {
+        currentSiteColor = websites[currentSiteIndex].color;
+        console.log(`Using site color: ${currentSiteColor}`);
+      }
     }
     
     // Calculate previous and next sites
@@ -170,7 +220,7 @@
       name: ringletName,
       description: ringletDescription,
       url: ringletUrl
-    });
+    }, currentSiteColor);
   }
   
   /**
@@ -190,11 +240,11 @@
   /**
    * Creates and inserts the widget DOM elements
    */
-  function createWidgetDOM(prevSite, nextSite, allSites, ringlet) {
+  function createWidgetDOM(prevSite, nextSite, allSites, ringlet, siteColor) {
     // Create container
     const container = document.createElement('div');
     container.id = 'webring-widget';
-    container.className = `webring-widget webring-widget-${config.colormode}`;
+    container.className = `webring-widget`;
     
     // Debug the ringlet object being passed to createWidgetDOM
     console.log('Creating widget DOM with ringlet:', ringlet);
@@ -236,6 +286,9 @@
     
     console.log(`Widget display values: ringletLinkUrl=${ringletLinkUrl}, ringletDisplayText=${ringletDisplayText}`);
     
+    // Determine text color based on background color
+    const textColor = getTextColorForBackground(siteColor);
+    
     // Create HTML
     container.innerHTML = `
       <div class="webring-widget-content">
@@ -261,8 +314,8 @@
       </div>
     `;
     
-    // Add styles
-    addWidgetStyles();
+    // Add styles with dynamic colors
+    addWidgetStyles(siteColor, textColor);
     
     // Add to the document
     document.body.appendChild(container);
@@ -271,11 +324,14 @@
   /**
    * Adds the necessary CSS for the widget
    */
-  function addWidgetStyles() {
+  function addWidgetStyles(backgroundColor, textColor) {
     // Check if styles are already added
     if (document.getElementById('webring-styles')) {
       return;
     }
+    
+    // Calculate hover background based on text color
+    const hoverBackground = textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.1)";
     
     // Create style element
     const styleEl = document.createElement('style');
@@ -292,18 +348,9 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         font-size: 14px;
         line-height: 1.5;
-      }
-      
-      .webring-widget-light {
-        background-color: #f5f5f5;
-        color: #333;
-        border-top: 1px solid #e0e0e0;
-      }
-      
-      .webring-widget-dark {
-        background-color: #222;
-        color: #fff;
-        border-top: 1px solid #444;
+        background-color: ${backgroundColor};
+        color: ${textColor};
+        border-top: 1px solid ${textColor === "black" ? "rgba(0, 0, 0, 0.1)" : "rgba(255, 255, 255, 0.2)"};
       }
       
       .webring-widget-content {
@@ -348,12 +395,8 @@
         fill: currentColor;
       }
       
-      .webring-widget-light .webring-widget-button:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-      }
-      
-      .webring-widget-dark .webring-widget-button:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+      .webring-widget-button:hover {
+        background-color: ${hoverBackground};
       }
       
       .webring-sr-only {

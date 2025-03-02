@@ -28,7 +28,26 @@
       "color": "#e5067d",
       "website_categories": [
         "personal_links",
-        "fun_web_projects"
+        "fun_web_projects",
+        "technology",
+        "space"
+      ],
+      "ringlets": [
+        "today_in_tabs"
+      ]
+    },
+    "https://thisisimportant.net/": {
+      "url": "https://thisisimportant.net/",
+      "name": "This is Important",
+      "description": "A blog about tech writing, music, and data analysis.",
+      "owner": "@smore",
+      "owner_type": "Bluesky",
+      "color": "#c73fd9",
+      "website_categories": [
+        "blog",
+        "music",
+        "tech-writing",
+        "data"
       ],
       "ringlets": [
         "today_in_tabs"

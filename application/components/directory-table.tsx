@@ -8,6 +8,19 @@ import { useFilterStore } from "@/stores/filters"
 import { isColorLight, darkenColor, getTextColorForBackground } from "@/utils/color"
 import type { Site } from "@/types"
 import { useCategories, useRinglets } from "@/hooks/use-filters"
+import { useRouter, useSearchParams } from "next/navigation"
+
+// Utility function to format category and ringlet names for display
+const formatDisplayName = (name: string): string => {
+  // Replace underscores and hyphens with spaces
+  const withSpaces = name.replace(/[_-]/g, ' ');
+  
+  // Convert to sentence case (capitalize first letter of each word)
+  return withSpaces
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 export default function DirectoryTable() {
   const { sites, isLoading: sitesLoading, error: sitesError } = useSites()
@@ -15,9 +28,50 @@ export default function DirectoryTable() {
   const { ringlets, isLoading: ringletsLoading, error: ringletsError } = useRinglets()
   const [selectedSite, setSelectedSite] = useState<Site | null>(null)
   const { selectedCategory, selectedRinglet, setCategory, setRinglet } = useFilterStore()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   
   const isLoading = sitesLoading || categoriesLoading || ringletsLoading
   const error = sitesError || categoriesError || ringletsError
+  
+  // Initialize filters from URL on page load
+  useEffect(() => {
+    const categoryParam = searchParams.get('category')
+    const ringletParam = searchParams.get('ringlet')
+    
+    // Only set the category if it exists in our categories list
+    if (categoryParam && categories?.some(cat => cat === categoryParam)) {
+      setCategory(categoryParam)
+    }
+    
+    // Only set the ringlet if it exists in our ringlets list
+    if (ringletParam && ringlets?.some(ring => ring.id === ringletParam)) {
+      setRinglet(ringletParam)
+    }
+  }, [categories, ringlets, searchParams, setCategory, setRinglet])
+  
+  // Update URL when filters change
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    // Create a new URLSearchParams object
+    const params = new URLSearchParams()
+    
+    // Add parameters only if they are selected
+    if (selectedCategory) {
+      params.set('category', selectedCategory)
+    }
+    
+    if (selectedRinglet) {
+      params.set('ringlet', selectedRinglet)
+    }
+    
+    // Construct the new URL
+    const newUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`
+    
+    // Update the URL without triggering a navigation/refresh
+    window.history.replaceState({}, '', newUrl)
+  }, [selectedCategory, selectedRinglet])
 
   // Add debug logging for filter changes
   useEffect(() => {
@@ -67,42 +121,72 @@ export default function DirectoryTable() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Category Dropdown */}
           <div className="relative">
-            <div className="flex">
-              <select
-                value={selectedCategory || ''}
-                onChange={handleCategoryChange}
-                className="w-full p-2 border rounded-md border-input bg-background appearance-none pr-10"
-              >
-                <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col">
+              <label htmlFor="category-select" className="text-lg font-medium mb-2">Show me sites about...</label>
+              <div className="flex">
+                <div className="relative w-full">
+                  <select
+                    id="category-select"
+                    value={selectedCategory || ''}
+                    onChange={handleCategoryChange}
+                    className={`w-full p-2 border rounded-md ${selectedCategory ? 'rounded-r-none border-r-0' : ''} border-input bg-background appearance-none pr-10`}
+                  >
+                    <option value="">Everything</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {formatDisplayName(category)}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+                {selectedCategory && (
+                  <button
+                    onClick={() => setCategory(null)}
+                    className="px-4 border border-input border-l-0 bg-background rounded-r-md hover:bg-muted transition-colors flex items-center justify-center"
+                    aria-label="Clear category selection"
+                  >
+                    <span className="text-muted-foreground font-medium text-lg">×</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
           {/* Ringlet Dropdown */}
           <div className="relative">
-            <div className="flex">
-              <select
-                value={selectedRinglet || ''}
-                onChange={handleRingletChange}
-                className="w-full p-2 border rounded-md border-input bg-background appearance-none pr-10"
-              >
-                <option value="">All Ringlets</option>
-                {ringlets.map((ringlet) => (
-                  <option key={ringlet.id} value={ringlet.id}>
-                    {ringlet.name}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <div className="flex flex-col">
+              <label htmlFor="ringlet-select" className="text-lg font-medium mb-2">From...</label>
+              <div className="flex">
+                <div className="relative w-full">
+                  <select
+                    id="ringlet-select"
+                    value={selectedRinglet || ''}
+                    onChange={handleRingletChange}
+                    className={`w-full p-2 border rounded-md ${selectedRinglet ? 'rounded-r-none border-r-0' : ''} border-input bg-background appearance-none pr-10`}
+                  >
+                    <option value="">Everywhere</option>
+                    {ringlets.map((ringlet) => (
+                      <option key={ringlet.id} value={ringlet.id}>
+                        {ringlet.name || formatDisplayName(ringlet.id)}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+                {selectedRinglet && (
+                  <button
+                    onClick={() => setRinglet(null)}
+                    className="px-4 border border-input border-l-0 bg-background rounded-r-md hover:bg-muted transition-colors flex items-center justify-center"
+                    aria-label="Clear ringlet selection"
+                  >
+                    <span className="text-muted-foreground font-medium text-lg">×</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -111,8 +195,8 @@ export default function DirectoryTable() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSites.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-muted-foreground">
-            No websites match the selected filters
+          <div className="text-2xl col-span-full text-center py-12 text-muted-foreground">
+            😱 No websites match the selected filters! Try clearing a filter or two.
           </div>
         ) : (
           filteredSites.map((site) => {
@@ -197,7 +281,7 @@ export default function DirectoryTable() {
                           : ""
                       }`}
                     >
-                      {category}
+                      {formatDisplayName(category)}
                     </span>
                   ))}
                   {site.ringlets?.map((ringlet, i) => (
@@ -211,7 +295,7 @@ export default function DirectoryTable() {
                           : ""
                       }`}
                     >
-                      {ringlet}
+                      {formatDisplayName(ringlet)}
                     </span>
                   ))}
                 </div>
