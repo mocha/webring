@@ -66,8 +66,8 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label htmlFor="url" className="block text-sm font-medium">
-            Website URL <span className="text-red-500">*</span>
+          <label htmlFor="url" className="block text-lg font-medium">
+            Site URL <span className="text-red-500">*</span>
           </label>
           <input
             id="url"
@@ -83,8 +83,8 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="name" className="block text-sm font-medium">
-            Website Name <span className="text-red-500">*</span>
+          <label htmlFor="name" className="block text-lg font-medium">
+            Site Name <span className="text-red-500">*</span>
           </label>
           <input
             id="name"
@@ -100,7 +100,10 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
         </div>
 
         <div className="space-y-2 col-span-1 md:col-span-2">
-          <h2 className="text-3xl font-bold mb-4">Website Description</h2>
+          <label htmlFor="description" className="block text-lg font-medium">
+            Site Description
+          </label>
+
           <textarea
             id="description"
             name="description"
@@ -113,7 +116,7 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="owner" className="block text-sm font-medium">
+          <label htmlFor="owner" className="block text-lg font-medium">
             Owner <span className="text-red-500">*</span>
           </label>
           <input
@@ -130,7 +133,7 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="owner_type" className="block text-sm font-medium">
+          <label htmlFor="owner_type" className="block text-lg font-medium">
             Owner Datatype
           </label>
           <input
@@ -146,7 +149,7 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="color" className="block text-sm font-medium">
+          <label htmlFor="color" className="block text-lg font-medium">
             Color
           </label>
           <div className="flex items-center space-x-2">
@@ -172,7 +175,9 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold mb-4">Categories</h2>
+        <label htmlFor="website_categories" className="block text-lg font-medium">
+            Categories
+          </label>
         <input
           id="website_categories"
           name="website_categories"
@@ -219,7 +224,9 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold mb-4">Ringlets</h2>
+        <label htmlFor="ringlets" className="block text-lg font-medium">
+            Ringlets
+          </label>
         <input
           id="ringlets"
           name="ringlets"
@@ -235,7 +242,7 @@ ${formData.ringlets.map((ring) => `  - "${ring}"`).join("\n")}
             }))
           }}
         />
-        <p className="text-xs text-muted-foreground">Enter multiple ringlet IDs separated by commas. If you want to add a ringlet, <a href="https://github.com/mocha/webring/" target="_blank" rel="noopener noreferrer">do so in this directory</a>.</p>
+        <p className="text-xs text-muted-foreground">Enter multiple ringlet IDs separated by commas. <a href="https://github.com/mocha/webring/" target="_blank" rel="noopener noreferrer">More info here</a>.</p>
 
         {ringlets && ringlets.length > 0 && (
           <div className="mt-2">

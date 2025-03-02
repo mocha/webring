@@ -22,10 +22,10 @@
     },
     "https://deuley.ltd": {
       "url": "https://deuley.ltd",
-      "name": "deuley.ltd",
+      "name": "Deuley.ltd",
       "owner": "@mocha",
       "owner_type": "github",
-      "color": "#012581",
+      "color": "#e5067d",
       "website_categories": [
         "personal_links",
         "fun_web_projects"

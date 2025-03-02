@@ -34,7 +34,7 @@ export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
         >
           <span className="webring-widget-description">
             🎉 This site is a member of {ringletName ? 'the' : ''} <a href={webringUrl} className="hover:underline">
-              {ringletName ? `${ringletName} webring!` : 'webring.fun'}
+              {ringletName ? `${ringletName} webring` : 'webring.fun'}!
             </a>
           </span>
           <div className="flex items-center gap-2">
@@ -54,9 +54,6 @@ export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
         </div>
       </div>
       
-      <p className="text-xs text-muted-foreground text-center">
-        This is a preview of how the webring widget will appear on your website.
-      </p>
     </div>
   )
 }

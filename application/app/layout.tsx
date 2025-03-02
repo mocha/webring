@@ -7,7 +7,7 @@ import { Home, Plus, DoorOpen } from "lucide-react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Webring Directory",
+  title: "🎉 webring.fun",
   description: "A modern webring connecting personal websites across the internet",
 }
 
@@ -22,8 +22,7 @@ export default function RootLayout({
         <header className="border-b border-border fixed top-0 left-0 right-0 w-full bg-background z-50">
           <div className="container mx-auto px-4 py-4 flex flex-row items-center justify-between gap-4">
             <Link href="/" className="text-xl font-bold flex items-center">
-              <Home size={20} className="mr-2" />
-              Webring!
+              🎉 webring.fun
             </Link>
             <nav>
               <ul className="flex items-center gap-6">
@@ -33,7 +32,7 @@ export default function RootLayout({
                     className="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
                   >
                     <DoorOpen size={18} className="mr-1" />
-                    <span>Join</span>
+                    <span>Join us!</span>
                   </Link>
                 </li>
               </ul>
@@ -41,6 +40,12 @@ export default function RootLayout({
           </div>
         </header>
         <div className="pt-16">{children}</div>
+        <footer className="border-t border-border py-2 text-center text-xs text-muted-foreground">
+        <div className="container mx-auto">
+          <p>Brought to you with ❤️ and 🌈 by <a href="https://github.com/mocha/" className="underline hover:text-primary">@mocha</a>, <a href="https://github.com/mocha/webring/blob/main/LICENSE" className="underline hover:text-primary">zero rights reserved</a>.</p>
+        </div>
+      </footer>
+
       </body>
     </html>
   )

@@ -31,8 +31,21 @@ export default function ConnectedWidgetSection() {
 
   return (
     <div className="space-y-8">
+
       {/* Widget Code Generator */}
       <div className="space-y-4">
+
+        <div className="relative">
+          <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">{code}</pre>
+          <button
+            onClick={copyToClipboard}
+            className="absolute top-2 right-2 p-2 rounded-md bg-background/80 hover:bg-background transition-colors"
+            aria-label="Copy code"
+          >
+            {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+          </button>
+        </div>
+
         <div className="flex flex-wrap gap-4 mb-4">
           <div className="space-y-1 flex-1 min-w-[200px]">
             <label htmlFor="ringlet" className="text-sm font-medium">
@@ -69,32 +82,15 @@ export default function ConnectedWidgetSection() {
           </div>
         </div>
 
-        <div className="relative">
-          <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">{code}</pre>
-          <button
-            onClick={copyToClipboard}
-            className="absolute top-2 right-2 p-2 rounded-md bg-background/80 hover:bg-background transition-colors"
-            aria-label="Copy code"
-          >
-            {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
-          </button>
-        </div>
 
-        {ringletId && (
-          <div className="p-3 bg-blue-50 text-blue-800 rounded-md text-sm">
-            <strong>New Feature:</strong> The ringlet name in the widget will now link directly 
-            to a filtered view of the directory showing only sites in this ringlet. 
-            You can also share links with URL parameters like <code>/?ringlet={ringletId}</code> 
-            or <code>/?category=personal</code>.
-          </div>
-        )}
       </div>
+
+      <hr className="my-8" />
       
       {/* Widget Preview Section */}
       <div>
-        <h3 className="text-xl font-semibold mb-4">Widget Preview</h3>
-        <p className="mb-4">
-          Here's how the widget will appear on your website:
+        <p className="mb-4 font-bold">
+          Which will look something like:
         </p>
         <WidgetDemo 
           colorMode={colorMode} 

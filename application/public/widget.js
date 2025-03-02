@@ -227,7 +227,7 @@
       <div class="webring-widget-content">
         <span class="webring-widget-description">
           🎉 This site is a member of ${ringletName ? `the` : ''} <a href="${ringletUrl}" target="_blank" rel="noopener">
-            ${ringletName ? `${ringletName} webring!` : 'webring.fun'}
+            ${ringletName ? `${ringletName} webring` : 'webring.fun'}!
           </a>
         </span>
         <nav class="webring-widget-nav">

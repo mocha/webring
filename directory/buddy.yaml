@@ -1,9 +1,0 @@
-url: "https://buddy.com"
-name: "Let's be buddies!"
-description: "Buddy is a social network except only my friend named buddy can join"
-owner: "@buddy"
-owner_type: "tabscord"
-color: "#f03"
-website_categories:
-    - "private_club"
-    - "fun_web_projects"
