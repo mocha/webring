@@ -7,6 +7,23 @@
     }
   },
   "websites": {
+    "https://almosteverythursday.com/": {
+      "name": "Almost Every Thursday",
+      "url": "https://almosteverythursday.com/",
+      "description": "Just a blog. Est. 2009",
+      "owner": "HamsterRelish",
+      "owner_type": "tabscord",
+      "color": "#000000",
+      "website_categories": [
+        "blog",
+        "books",
+        "writing",
+        "photography"
+      ],
+      "ringlets": [
+        "today-in-tabs"
+      ]
+    },
     "https://cjlm.ca": {
       "url": "https://cjlm.ca",
       "name": "cjlm.ca",
@@ -20,12 +37,13 @@
         "books"
       ],
       "ringlets": [
-        "today_in_tabs"
+        "today-in-tabs"
       ]
     },
     "https://deuley.ltd": {
       "url": "https://deuley.ltd",
       "name": "Deuley.ltd",
+      "description": "Deuley's collection of personal links to all of his stupid projects.",
       "owner": "@mocha",
       "owner_type": "github",
       "color": "#e5067d",
@@ -34,7 +52,7 @@
         "fun_web_projects"
       ],
       "ringlets": [
-        "today_in_tabs"
+        "today-in-tabs"
       ]
     },
     "https://thisisimportant.net/": {

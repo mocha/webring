@@ -5,8 +5,8 @@ owner: "@cjlm"
 owner_type: "tabscord"
 color: "#012581"
 website_categories:
-    - "photography"
-    - "writing"
-    - "books"
+  - "photography"
+  - "writing"
+  - "books"
 ringlets:
-    - "today_in_tabs"
+  - "today-in-tabs"

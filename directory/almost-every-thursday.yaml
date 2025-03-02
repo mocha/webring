@@ -1,0 +1,13 @@
+name: "Almost Every Thursday"
+url: "https://almosteverythursday.com/"
+description: "Just a blog. Est. 2009"
+owner: "HamsterRelish"
+owner_type: "tabscord"
+color: "#000000"
+website_categories:
+  - "blog"
+  - "books"
+  - "writing"
+  - "photography"
+ringlets:
+  - "today-in-tabs"

@@ -250,22 +250,25 @@ export default function DirectoryTable() {
                   </h3>
 
                   <p className={`text-sm mb-4 ${textColorFaded}`}>
-                    <span className="inline-block">
-                      <a
-                        href={site.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:underline"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {new URL(site.url).hostname}
-                      </a>
-                    </span>
-                    <span className="mx-2">•</span>
-                    <span>
-                      {site.owner}
-                      {site.owner_type && <span className="text-xs ml-1">({site.owner_type})</span>}
-                    </span>
+                    {site.description ? (
+                      <span className="inline-block line-clamp-3">
+                        {site.description.length > 250 
+                          ? site.description.substring(0, 250) + '...' 
+                          : site.description}
+                      </span>
+                    ) : (
+                      <span className="inline-block">
+                        <a
+                          href={site.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {new URL(site.url).hostname}
+                        </a>
+                      </span>
+                    )}
                   </p>
                 </div>
 
