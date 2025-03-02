@@ -12,9 +12,23 @@ interface WidgetDemoProps {
 }
 
 export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
-  // Use the ringlet's URL if available, otherwise link to the directory with the ringlet filter
-  const webringUrl = ringlet?.url || (ringlet?.id ? `/?ringlet=${ringlet.id}` : "https://webring.fun");
-  const ringletName = ringlet?.name || null;
+  // Determine the link URL and text based on ringlet information
+  let webringUrl;
+  let ringletDisplayText;
+  
+  if (!ringlet) {
+    // Case 1: No ringlet specified
+    webringUrl = "https://webring.fun";
+    ringletDisplayText = "webring.fun";
+  } else if (ringlet && !ringlet.url) {
+    // Case 2: Ringlet specified but no URL
+    webringUrl = `/?ringlet=${ringlet.id}`;
+    ringletDisplayText = `${ringlet.name} webring`;
+  } else {
+    // Case 3: Ringlet specified with URL
+    webringUrl = ringlet.url || `/?ringlet=${ringlet.id}`;
+    ringletDisplayText = `${ringlet.name} webring`;
+  }
   
   return (
     <div className="space-y-4">
@@ -33,9 +47,9 @@ export default function WidgetDemo({ ringlet, colorMode }: WidgetDemoProps) {
           style={{ height: '40px', borderTop: colorMode === "dark" ? '1px solid #444' : '1px solid #e0e0e0' }}
         >
           <span className="webring-widget-description">
-            🎉 This site is a member of {ringletName ? 'the' : ''} <a href={webringUrl} className="hover:underline">
-              {ringletName ? `${ringletName} webring` : 'webring.fun'}!
-            </a>
+            🎉 This site is a member of {ringlet ? 'the ' : ''}<a href={webringUrl} className="hover:underline">
+              {ringletDisplayText}
+            </a>!
           </span>
           <div className="flex items-center gap-2">
             <button className="p-1 rounded-md hover:bg-gray-200/20 flex items-center justify-center w-7 h-7" title="Previous site">

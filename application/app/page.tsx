@@ -12,7 +12,7 @@ export default function HomePage() {
       
       <main className="flex-1 container mx-auto px-4 py-8">
         <section className="mb-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Guys we're doing a webring!</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">We're doing a webring!</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Webrings are loose collections of <em>personal websites</em> that each link to the next (you know, making a circle-like object). This makes it easier to discover new individual websites, helping you connect with more people with interesting stuff to share.
           </p>

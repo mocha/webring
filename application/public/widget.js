@@ -216,19 +216,33 @@
     // Prepare random site
     const randomSite = getRandomSite();
     
-    // Determine link URL - use ringlet URL if available, otherwise use base URL
-    const ringletUrl = ringlet.url || (config.ringlet ? `${config.baseUrl}/?ringlet=${config.ringlet}` : config.baseUrl);
-    const ringletName = ringlet.name || null;
+    // Handle ringlet URL and text according to requirements:
+    let ringletLinkUrl;
+    let ringletDisplayText;
     
-    console.log(`Widget display values: ringletUrl=${ringletUrl}, ringletName=${ringletName}`);
+    if (!ringlet.name) {
+      // Case 1: No ringlet specified
+      ringletLinkUrl = config.baseUrl;
+      ringletDisplayText = 'webring.fun';
+    } else if (ringlet.name && !ringlet.url) {
+      // Case 2: Ringlet specified but no URL
+      ringletLinkUrl = `${config.baseUrl}/?ringlet=${config.ringlet}`;
+      ringletDisplayText = `${ringlet.name} webring`;
+    } else {
+      // Case 3: Ringlet specified with URL
+      ringletLinkUrl = ringlet.url;
+      ringletDisplayText = `${ringlet.name} webring`;
+    }
+    
+    console.log(`Widget display values: ringletLinkUrl=${ringletLinkUrl}, ringletDisplayText=${ringletDisplayText}`);
     
     // Create HTML
     container.innerHTML = `
       <div class="webring-widget-content">
         <span class="webring-widget-description">
-          🎉 This site is a member of ${ringletName ? `the` : ''} <a href="${ringletUrl}" target="_blank" rel="noopener">
-            ${ringletName ? `${ringletName} webring` : 'webring.fun'}!
-          </a>
+          🎉 This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">
+            ${ringletDisplayText}
+          </a>!
         </span>
         <nav class="webring-widget-nav">
           <a href="${prevSite.url}" class="webring-widget-button" title="Previous: ${prevSite.name}">

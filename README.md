@@ -39,14 +39,49 @@ ringlets:
 
 ## Ringlets
 
-Ringlets are cool! They're subsections of the full webring, meaning you can use them to create your OWN webring without any extra effort. Here's how it works:
+Ringlets are cool! They're subsections of the full webring, meaning you can use them to create your OWN webring without any extra effort. When you include the widget on your site, it will only link to _(on the left, right, and shuffle buttons)_ other sites that are part of the same ringlet.
+
+If your ringlet includes a URL, where it says "Member of ___ webring!", it will link to that URL. If no URL is given, it will link to `webring.fun?ringlet=your-ringlet` so viewers can peruse at their leisure.
+
+Here's how it works:
 
 1. Define a ringlet in the `/ringlets/ directory. They only require a few fields:
 
-```
+```yaml
 name: "Your Ringlet"
-description: "Fans of the 'Beets vs bears' Fan Appreciation and Critique Podcast of Seasons 1-3 of The Hit Sitcom, The Office"
+description: "Fans of the 'Beets V Bears' Fan Appreciation and Critique Podcast of Seasons 1-3 of The Hit Sitcom The Office"
 url: "https://www.bearsbeetsbattlestar.com/"
 ```
 
-2. 
+2. The filename of your ringlet (without the .yaml part) is it's `id`. Reference that id in your directory entries in the `ringlets:` section.
+
+3. When you (and your friends!) add the widget code to your site(s), include the ringlet:
+
+```html
+<script src="https://webring.fun/widget.js"></script>
+<script>
+  webring.init({
+    ringlet: "your-ringlet",
+    colormode: "light"
+  });
+</script>
+```
+
+---
+
+## Contributing
+
+Everyone is welcome to contribute, and / or remixes, spinoffs, forks, or any other deviations are also strongly encouraged. If your passion is making the internet a more fun and human place, then we're on the same team.
+
+If you want to run it locally, it's as simple as:
+
+```bash
+cd application
+npm install
+npm run dev
+```
+
+The `dev` command also watches the `/directory` and `/ringlets` directories and recompiles the database on any changes.
+
+_If your changes touch the application code,_ consider running `npm run build` first to catch any build errors.
+
