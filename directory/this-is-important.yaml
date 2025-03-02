@@ -1,0 +1,13 @@
+url: "https://thisisimportant.net/"
+name: "This is Important"
+description: "A blog about tech writing, music, and data analysis."
+owner: "@smore"
+owner_type: "Bluesky"
+color: "#c73fd9"
+website_categories:
+  - "blog"
+  - "music"
+  - "tech-writing"
+  - "data"
+ringlets:
+  - "today_in_tabs"
