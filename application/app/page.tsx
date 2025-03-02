@@ -6,6 +6,7 @@ import { ExternalLink } from "lucide-react"
 import DirectoryTable from "@/components/directory-table"
 import { useFilterStore } from "@/stores/filters"
 import { useRinglets } from "@/hooks/use-filters"
+import { Suspense } from "react"
 
 // Utility function to format category and ringlet names for display
 const formatDisplayName = (name: string): string => {
@@ -19,7 +20,8 @@ const formatDisplayName = (name: string): string => {
     .join(' ');
 };
 
-export default function Home() {
+// Component that uses useSearchParams
+function HomePage() {
   const { selectedCategory, selectedRinglet } = useFilterStore();
   const { ringlets } = useRinglets();
   
@@ -88,7 +90,31 @@ export default function Home() {
 
       <DirectoryTable />
 
+      <section className="mt-12 text-center">
+        <h2 className="text-2xl font-bold mb-4">Want to join?</h2>
+        <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+          If you have a personal website, blog, or other individually-maintained web presence, you're welcome to join our webring!
+        </p>
+        <Link href="/join">
+          <button className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-4 text-base font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors">
+            Join the webring
+          </button>
+        </Link>
+      </section>
     </main>
+  )
+}
+
+// Wrap the component with Suspense
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="container py-8 md:py-12 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">Loading...</h1>
+      </div>
+    }>
+      <HomePage />
+    </Suspense>
   )
 }
 
