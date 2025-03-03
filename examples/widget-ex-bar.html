@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webring Widget Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        article {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .controls {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>My Example Blog</h1>
+    <h2>A collection of thoughts and musings</h2>
+
+    <hr>
+
+    <ul>
+        <li><a href="widget-bar-1.html">Widget-bar-1</a></li>
+        <li><a href="widget-box-1.html">Widget-box-1</a></li>
+        <li><a href="widget-static-1.html">Widget-static-1</a></li>
+    </ul>
+    <hr>
+
+    <article>
+        <h3>Reflections on a Quiet Morning</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        <small>Posted on September 15, 2023</small>
+    </article>
+
+    <article>
+        <h3>Notes from the Garden</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        <small>Posted on September 12, 2023</small>
+    </article>
+
+    <article>
+        <h3>Weekend Projects</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+        <small>Posted on September 8, 2023</small>
+    </article>
+
+    <article>
+        <h3>Simple Observations</h3>
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias.</p>
+        <small>Posted on September 5, 2023</small>
+    </article>
+
+    <article>
+        <h3>The Art of Simplicity</h3>
+        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est.</p>
+        <small>Posted on September 1, 2023</small>
+    </article>
+    
+    <article>
+        <h3>Technical Explorations</h3>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
+        <small>Posted on August 28, 2023</small>
+    </article>
+    
+    <article>
+        <h3>Future Considerations</h3>
+        <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+        <small>Posted on August 25, 2023</small>
+    </article>
+
+    
+    <script src="http://localhost:3000/widget.js"></script>
+    <script>
+      // Complete configuration of the bar style widget
+      webring.init({
+        // Required - specifies the widget type
+        type: "bar",
+
+        // Optional - join a specific ringlet
+        // ringlet: "today-in-tabs",
+        
+        // Visual appearance
+        color: "#00ffcc", // Custom hex color for the widget (overrides colormode)
+        opacity: 0.95, // Opacity between 0.2 and 1.0
+        
+        // Position options
+        position: "bottom", // Placement: "top", "bottom", "left", "right"
+        position_tab: "left", // Tab position: "left", "center", "right" 
+        
+        // Behavior options
+        slide_toggle: true, // Whether widget should have toggle tab and slide in/out when clicked
+        // auto_hide: true, // Whether the widget auto-hides after a delay
+        // hide_delay: 3000, // Delay in ms before hiding (default is 3000ms)
+        
+        // Advanced options
+        // siteUrl: "https://deuley.ltd", // Custom site URL if auto-detection fails        
+        // baseUrl: "https://webring.fun" // Custom base URL for the webring
+
+      });
+    </script>
+
+</body>
+</html>

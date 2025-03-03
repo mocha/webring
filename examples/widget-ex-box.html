@@ -50,11 +50,8 @@
 
     <ul>
         <li><a href="widget-bar-1.html">Widget-bar-1</a></li>
-        <li><a href="widget-bar-2.html">Widget-bar-2</a></li>
         <li><a href="widget-box-1.html">Widget-box-1</a></li>
-        <li><a href="widget-box-2.html">Widget-box-2</a></li>
         <li><a href="widget-static-1.html">Widget-static-1</a></li>
-        <li><a href="widget-static-2.html">Widget-static-2</a></li>
     </ul>
 
     <hr>
@@ -103,18 +100,31 @@
     
     <script src="http://localhost:3000/widget.js"></script>
     <script>
-    // the most minimal config of the bar style widget
-    webring.init({
-        type: "bar",
-        ringlet: "today-in-tabs", // Optional - only if participating in a specific ringlet
-        position: "top",            // "top" or "bottom"
-        color: "#3498db",           // Custom hex color
-        opacity: 0.8,               // Opacity between 0.2 and 1
-        slide_out: true,            // Will slide out after a few seconds
-        siteUrl: "https://deuley.ltd" // This will make it look up your real site in the webring
-    });
+      // Complete configuration of the box style widget
+      webring.init({
+        // Required - specifies the widget type
+        type: "box",
+        
+        // Site identification
+        siteUrl: "https://deuley.ltd", // Custom site URL if auto-detection fails
+        
+        // Optional - join a specific ringlet
+        // ringlet: "today-in-tabs",
+        
+        // Visual appearance
+        color: "#e74c3c", // Custom hex color for the widget
+        opacity: 0.9, // Opacity between 0.2 and 1.0
+        
+        // Position options
+        position: "bottom-right", // Placement: "top-left", "top-right", "bottom-left", "bottom-right"
+        
+        // Behavior options
+        start_collapsed: false, // Whether to start as small badge (true) or full widget (false)
+        
+        // Advanced options
+        baseUrl: "https://webring.fun" // Custom base URL for the webring
+      });
     </script>
-
 
 </body>
 </html>
