@@ -21,7 +21,9 @@
     hide_delay: 3000, // Delay in milliseconds before auto-hide
     static_position: null, // For static widget: position
     fixed_position: false, // For static widget: whether it's fixed-positioned
-    start_collapsed: false // For box widget: whether to start in collapsed (badge) mode
+    start_collapsed: false, // For box widget: whether to start in collapsed (badge) mode
+    tab_content: null, // Custom tab content
+    widget_content: null // Custom widget content
   };
   
   // Initialize with user options
@@ -403,21 +405,28 @@
     const pullTabHTML = config.slide_toggle ? `
       <div class="webring-widget-pull-tab" title="Toggle webring widget">
         <div class="webring-widget-pull-tab-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor">
-            <!-- Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) -->
-            <path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/>
-          </svg>
-          <span class="webring-widget-pull-tab-text">webring.fun</span>
+          ${config.tab_content ? config.tab_content : `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor">
+              <!-- Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) -->
+              <path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/>
+            </svg>
+            <span class="webring-widget-pull-tab-text">webring.fun</span>
+          `}
         </div>
       </div>
     ` : '';
+    
+    // Create the widget description content
+    const widgetDescription = config.widget_content ? 
+      config.widget_content : 
+      `This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>!`;
     
     // Create HTML structure for the main content
     const contentHTML = `
       <div class="webring-widget-container">
         <div class="webring-widget-content">
           <span class="webring-widget-description">
-            This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>!
+            ${widgetDescription}
           </span>
           <nav class="webring-widget-nav">
             <a href="${prevSite.url}" class="webring-widget-button" title="Previous: ${prevSite.name}">
@@ -447,12 +456,21 @@
     // Add to the document
     document.body.appendChild(container);
     
-    // Always make the widget visible initially
-    container.classList.add('webring-widget-visible');
-    
-    // Add slide out functionality if enabled
+    // Check for slide toggle and saved state
     if (config.slide_toggle) {
+      const savedState = sessionStorage.getItem('webring-bar-widget-state');
+      if (savedState === 'hidden') {
+        // Don't make the widget visible if we've saved a hidden state
+        container.classList.remove('webring-widget-visible');
+      } else {
+        // Make the widget visible initially on first visit or if saved as visible
+        container.classList.add('webring-widget-visible');
+      }
+      
       setupSlideOut(container);
+    } else {
+      // If not using slide toggle, always make the widget visible
+      container.classList.add('webring-widget-visible');
     }
     
     // Add space to the page if widget is at the top
@@ -685,15 +703,17 @@
     // Determine text color based on background color
     const textColor = getTextColorForBackground(siteColor);
     
-    // Create reopen tab HTML - now using ringletDisplayText
+    // Create reopen tab HTML - now using custom tab content if provided
     const reopenTabHTML = `
       <div class="webring-widget-reopen-tab" title="Show webring widget">
         <div class="webring-widget-reopen-tab-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor">
-            <!-- Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) -->
-            <path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/>
-          </svg>
-          <span class="webring-widget-reopen-tab-text">${ringletDisplayText}</span>
+          ${config.tab_content ? config.tab_content : `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="currentColor">
+              <!-- Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) -->
+              <path d="M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z"/>
+            </svg>
+            <span class="webring-widget-reopen-tab-text">${ringletDisplayText}</span>
+          `}
         </div>
       </div>
     `;
@@ -726,6 +746,11 @@
     // Store the original position as a class on the wrapper
     wrapper.classList.add(`webring-widget-${config.position}`);
     
+    // Create the widget description content
+    const widgetDescription = config.widget_content ? 
+      config.widget_content : 
+      `This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>!`;
+    
     // Create HTML structure for the main content with header
     container.innerHTML = `
       <div class="webring-widget-header">
@@ -742,7 +767,7 @@
       </div>
       <div class="webring-widget-box-content">
         <span class="webring-widget-description">
-          This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>!
+          ${widgetDescription}
         </span>
         <nav class="webring-widget-nav">
           <a href="${prevSite.url}" class="webring-widget-button-container" title="Previous: ${prevSite.name}" style="--hover-color: ${prevSite.color || siteColor}">
@@ -1419,6 +1444,11 @@
       </div>
     `;
     
+    // Create the widget description content
+    const widgetTitle = config.widget_content ? 
+      config.widget_content : 
+      `This site is a member of <a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>`;
+    
     // Create HTML content
     let contentHTML;
     
@@ -1427,7 +1457,7 @@
         <div class="webring-widget-static-content">
           <div class="webring-widget-static-header">
             <h3 class="webring-widget-static-title">
-              This site is a member of <a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>
+              ${widgetTitle}
             </h3>
           </div>
           <div class="webring-widget-static-sites">
@@ -1478,7 +1508,7 @@
         <div class="webring-widget-static-content">
           <div class="webring-widget-static-header">
             <h3 class="webring-widget-static-title">
-              Member of <a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>
+              ${widgetTitle}
             </h3>
           </div>
           <div class="webring-widget-static-simple-nav">
@@ -1842,13 +1872,22 @@
       // Track whether the user has manually toggled the widget
       let userToggled = false;
       
-      // Initially show widget for a few seconds
-      setTimeout(() => {
-        // Only auto-hide initially if user hasn't toggled
-        if (!userToggled) {
-          container.classList.remove('webring-widget-visible');
-        }
-      }, 3000);
+      // Check if we have a saved state in sessionStorage
+      const savedState = sessionStorage.getItem('webring-bar-widget-state');
+      
+      // Only set up the initial timeout if this is the first visit (no saved state)
+      if (!savedState) {
+        // First visit - initially widget is shown (already set in createBarWidgetDOM)
+        // Set a timeout to hide it after a few seconds
+        setTimeout(() => {
+          // Only auto-hide initially if user hasn't toggled
+          if (!userToggled) {
+            container.classList.remove('webring-widget-visible');
+            // Save the initial auto-hidden state
+            sessionStorage.setItem('webring-bar-widget-state', 'hidden');
+          }
+        }, 3000);
+      }
       
       // Find the pull tab element
       const pullTab = container.querySelector('.webring-widget-pull-tab');
@@ -1860,7 +1899,12 @@
           e.preventDefault();
           e.stopPropagation();
           userToggled = true; // Mark that user has manually toggled
-          container.classList.toggle('webring-widget-visible');
+          
+          // Toggle visibility
+          const isVisible = container.classList.toggle('webring-widget-visible');
+          
+          // Store the state in sessionStorage
+          sessionStorage.setItem('webring-bar-widget-state', isVisible ? 'visible' : 'hidden');
         });
       }
       
