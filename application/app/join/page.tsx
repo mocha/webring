@@ -113,6 +113,8 @@ export default function JoinPage() {
             onToggle={() => toggleSection(2)}
           >
 
+
+
             <p className="text-lg mb-6">
               Copy the widget code to your site:
             </p>
