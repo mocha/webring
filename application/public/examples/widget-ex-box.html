@@ -4,57 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webring Widget Test</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        article {
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-        }
-        .controls {
-            position: fixed;
-            top: 60px;
-            right: 20px;
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 10000;
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        button:hover {
-            background: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>My Example Blog</h1>
-    <h2>A collection of thoughts and musings</h2>
+  <h1>Widget Example - Bar</h1>
+
+  <ul>
+      <li><a href="widget-ex-bar.html">Bar Widget Example</a></li>
+      <li><a href="widget-ex-box.html">Box Widget Example</a></li>
+      <li><a href="widget-ex-static.html">Static Widget Example</a></li>
+  </ul>
+
+  <hr>
+
+  <h2>Customize your widget</h2>
+
+  <p>The widget on this page is configured using the 👇 code below 👇 this section. <strong>If you want to customize your widget,</strong> tinker with the settings in the configurator and we'll update the code below to reflect your changes.</p>
+
+  <button id="toggleControls" class="control-toggle">⚡️ Configurate! ⚡️</button>
+
+
+    <div id="controlPanel" class="control-panel hidden">
+        <h3>Widget Configuration</h3>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="ringlet">Ringlet:</label>
+            </div>
+            <div class="form-row-input">
+                <input type="text" id="ringlet" placeholder="(optional)">
+            </div>
+            <div class="form-row-helptext">Join a specific ringlet by entering its name</div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="widgetColor">Color:</label>
+            </div>
+            <div class="form-row-input">
+                <div class="color-inputs">
+                    <input type="color" id="widgetColor" value="#e74c3c">
+                    <input type="text" id="widgetColorText" value="#e74c3c" placeholder="e.g. #e74c3c">
+                </div>
+            </div>
+            <div class="form-row-helptext">Choose a custom color for your widget</div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="widgetOpacity">Opacity:</label>
+            </div>
+            <div class="form-row-input">
+                <div class="opacity-inputs">
+                    <input type="range" id="widgetOpacity" min="0.2" max="1.0" step="0.05" value="0.9">
+                    <input type="text" id="widgetOpacityText" value="0.9" style="flex: 0 0 60px; margin-left: 8px;">
+                </div>
+            </div>
+            <div class="form-row-helptext">Adjust the transparency of your widget (0.2 to 1.0)</div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="widgetContent">Widget Content:</label>
+            </div>
+            <div class="form-row-input">
+                <textarea id="widgetContent" rows="3" placeholder="I'm a member of a webring and it's an extremely cool thing to do with my time."></textarea>
+            </div>
+            <div class="form-row-helptext">Customize the text content of your widget</div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="widgetPosition">Widget Position:</label>
+            </div>
+            <div class="form-row-input">
+                <select id="widgetPosition">
+                    <option value="top-left">Top Left</option>
+                    <option value="top-right">Top Right</option>
+                    <option value="bottom-left">Bottom Left</option>
+                    <option value="bottom-right" selected>Bottom Right</option>
+                </select>
+            </div>
+            <div class="form-row-helptext">Choose where to place the widget on your page</div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-row-label">
+                <label for="startCollapsed">Start Collapsed:</label>
+            </div>
+            <div class="form-row-input">
+                <input type="checkbox" id="startCollapsed">
+            </div>
+            <div class="form-row-helptext">Begin with the widget in its compact form</div>
+        </div>
+        
+        <button id="applyChanges" class="apply-btn">Apply Changes</button>
+    </div>
 
     <hr>
 
-    <ul>
-        <li><a href="widget-ex-bar.html">Bar Widget Example</a></li>
-        <li><a href="widget-ex-box.html">Box Widget Example</a></li>
-        <li><a href="widget-ex-static.html">Static Widget Example</a></li>
-    </ul>
+    <h2>Widget code</h2>
+
+    <p>You can copy and paste this code into your own HTML file to add a widget to your site.</p>
+
+    <div class="code-example">
+        <pre><code id="codeExample">&lt;script src="http://webring.fun/widget.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // Complete configuration of the box style widget
+    webring.init({
+        // Required - specifies the widget type
+        type: "box",
+        
+        // Optional - join a specific ringlet
+        // ringlet: "today-in-tabs",
+        
+        // Visual appearance
+        color: "#e74c3c", // Custom hex color for the widget
+        opacity: 0.9, // Opacity between 0.2 and 1.0
+
+        // Content options
+        // widget_content: "I'm a member of a <a href='https://webring.fun'>webring</a> and it's an <em>extremely cool</em> thing to do with my time.",
+        
+        // Position options
+        position: "bottom-right", // Placement: "top-left", "top-right", "bottom-left", "bottom-right"
+        
+        // Behavior options
+        start_collapsed: false // Whether to start as small badge (true) or full widget (false)
+    });
+&lt;/script&gt;</code></pre>
+    </div>
 
     <hr>
+
+    <h2>Some random content so you can scroll around</h2>
 
     <article>
         <h3>Reflections on a Quiet Morning</h3>
@@ -97,37 +180,284 @@
         <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
         <small>Posted on August 25, 2023</small>
     </article>
-    
-    <script src="http://localhost:3000/widget.js"></script>
+
+    <script src="http://localhost:3000/widget.js" id="webring-script"></script>
     <script>
-      // Complete configuration of the box style widget
-      webring.init({
-        // Required - specifies the widget type
+      // Widget container to hold the dynamic script
+      const widgetContainer = document.createElement('div');
+      widgetContainer.id = 'widget-container';
+      document.body.appendChild(widgetContainer);
+    
+      // Initial widget configuration object
+      let widgetConfig = {
         type: "box",
+        color: "#e74c3c",
+        opacity: 0.9,
+        position: "bottom-right",
+        start_collapsed: false
+      };
+      
+      // Function to completely reload the widget with new configuration
+      function reloadWidget(config) {
+        console.log("Reloading widget with config:", config);
         
-        // Site identification
-        siteUrl: "https://deuley.ltd", // Custom site URL if auto-detection fails
+        // Ensure start_collapsed is explicitly set as a boolean
+        if (config.start_collapsed === undefined) {
+          config.start_collapsed = false;
+        } else {
+          config.start_collapsed = Boolean(config.start_collapsed);
+        }
         
+        // Create a clean copy of the config to avoid reference issues
+        const cleanConfig = JSON.parse(JSON.stringify(config));
+        console.log("Cleaned config:", cleanConfig);
+        
+        // Clear any widget-related items from storage
+        sessionStorage.clear();
+        localStorage.clear();
+        
+        // Remove any existing widget elements
+        document.querySelectorAll('.webring-widget, .webring-widget-container, [id^="webring"]').forEach(el => {
+          el.remove();
+        });
+        
+        // Remove any existing script elements related to webring
+        document.querySelectorAll('script[id="webring-init"], script[id^="webring-init-"]').forEach(el => {
+          el.remove();
+        });
+        
+        // Clear the widget container
+        widgetContainer.innerHTML = '';
+        
+        // Create a temporary data attribute to pass configuration
+        window.__WEBRING_CONFIG__ = cleanConfig;
+        
+        // Initialize directly with a new function
+        initializeDirectly(cleanConfig);
+      }
+      
+      function initializeDirectly(config) {
+        // Ensure the DOM is ready before initializing
+        setTimeout(() => {
+          try {
+            console.log("Directly initializing widget with config:", config);
+            
+            // If webring exists, use it
+            if (window.webring) {
+              // Force a clean initialization
+              const stringifiedConfig = JSON.stringify(config);
+              
+              // Create a new initialization script to ensure clean execution
+              const initScript = document.createElement('script');
+              initScript.id = "webring-init-" + Date.now(); // Unique ID to avoid conflicts
+              initScript.textContent = `
+                try {
+                  // Set explicit properties to ensure they're correctly typed
+                  const config = ${stringifiedConfig};
+                  
+                  // Force boolean values with explicit true/false
+                  config.start_collapsed = ${config.start_collapsed === true ? 'true' : 'false'};
+                  
+                  console.log("Initializing widget with final config:", config);
+                  webring.init(config);
+                } catch(e) {
+                  console.error("Error initializing widget:", e);
+                }
+              `;
+              document.body.appendChild(initScript);
+              
+              // Update the code example
+              updateCodeExample(config);
+            } else {
+              console.error("Webring object not found!");
+              // Load the script and try again
+              loadWebringScript(config);
+            }
+          } catch (e) {
+            console.error("Error during direct initialization:", e);
+            // Fall back to script loading
+            loadWebringScript(config);
+          }
+        }, 100);
+      }
+      
+      function loadWebringScript(config) {
+        console.log("Loading webring script with config:", config);
+        
+        // Create new script element for the widget
+        const scriptTag = document.createElement('script');
+        scriptTag.src = "http://localhost:3000/widget.js";
+        scriptTag.id = "webring-dynamic-script";
+        
+        // When the script loads, initialize with explicit configuration
+        scriptTag.onload = function() {
+          console.log("Widget script loaded, initializing with:", config);
+          initializeDirectly(config);
+        };
+        
+        // Add the script to the body
+        document.body.appendChild(scriptTag);
+      }
+      
+      // Function to update the code example
+      function updateCodeExample(config) {
+        const codeExample = document.getElementById('codeExample');
+        
+        // Start with the basic structure
+        let code = `&lt;script src="http://webring.fun/widget.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+    // Complete configuration of the box style widget
+    webring.init({
+        // Required - specifies the widget type
+        type: "${config.type}",\n`;
+        
+        // Optional ringlet
+        if (config.ringlet) {
+          code += `
         // Optional - join a specific ringlet
-        // ringlet: "today-in-tabs",
+        ringlet: "${config.ringlet}",\n`;
+        } else {
+          code += `
+        // Optional - join a specific ringlet
+        // ringlet: "today-in-tabs",\n`;
+        }
         
         // Visual appearance
-        color: "#e74c3c", // Custom hex color for the widget
-        opacity: 0.9, // Opacity between 0.2 and 1.0
-
+        code += `
+        // Visual appearance
+        color: "${config.color}", // Custom hex color for the widget
+        opacity: ${config.opacity}, // Opacity between 0.2 and 1.0\n`;
+        
         // Content options
-        // widget_content: "I'm a member of a <a href='https://webring.fun'>webring</a> and it's an <em>extremely cool</em> thing to do with my time.",
+        code += `
+        // Content options\n`;
+        if (config.tab_content) {
+          code += `        tab_content: "${config.tab_content}",\n`;
+        } else {
+          code += `        // tab_content: "🔗 Webring",\n`;
+        }
+        
+        if (config.widget_content) {
+          code += `        widget_content: "${config.widget_content}",\n`;
+        } else {
+          code += `        // widget_content: "I'm a member of a <a href='https://webring.fun'>webring</a> and it's an <em>extremely cool</em> thing to do with my time.",\n`;
+        }
         
         // Position options
-        position: "bottom-right", // Placement: "top-left", "top-right", "bottom-left", "bottom-right"
+        code += `
+        // Position options
+        position: "${config.position}", // Placement: "top-left", "top-right", "bottom-left", "bottom-right"\n`;
         
         // Behavior options
-        start_collapsed: false, // Whether to start as small badge (true) or full widget (false)
+        code += `
+        // Behavior options
+        start_collapsed: ${config.start_collapsed} // Whether to start as small badge (true) or full widget (false)
+    });
+&lt;/script&gt;`;
         
-        // Advanced options
-        baseUrl: "https://webring.fun" // Custom base URL for the webring
+        codeExample.innerHTML = code;
+      }
+      
+      // Function to sync the form controls with the current config
+      function syncFormWithConfig() {
+        document.getElementById('ringlet').value = widgetConfig.ringlet || '';
+        document.getElementById('widgetColor').value = widgetConfig.color;
+        document.getElementById('widgetColorText').value = widgetConfig.color;
+        document.getElementById('widgetOpacity').value = widgetConfig.opacity;
+        document.getElementById('widgetOpacityText').value = widgetConfig.opacity;
+        document.getElementById('widgetPosition').value = widgetConfig.position;
+        document.getElementById('startCollapsed').checked = widgetConfig.start_collapsed;
+        
+        if (widgetConfig.tab_content) {
+          document.getElementById('tabContent').value = widgetConfig.tab_content;
+        }
+        if (widgetConfig.widget_content) {
+          document.getElementById('widgetContent').value = widgetConfig.widget_content;
+        }
+      }
+
+      // Initialize form with current values
+      function initializeForm() {
+        // Set the form controls to match the config
+        syncFormWithConfig();
+        
+        // Show/hide the control panel when the toggle button is clicked
+        document.getElementById('toggleControls').addEventListener('click', function() {
+          const controlPanel = document.getElementById('controlPanel');
+          controlPanel.classList.toggle('hidden');
+          this.textContent = controlPanel.classList.contains('hidden') ? 
+            'Show Widget Controls' : 'Hide Widget Controls';
+        });
+
+        // Sync color picker with text field
+        document.getElementById('widgetColor').addEventListener('input', function() {
+          document.getElementById('widgetColorText').value = this.value;
+        });
+        
+        // Sync text field with color picker
+        document.getElementById('widgetColorText').addEventListener('input', function() {
+          document.getElementById('widgetColor').value = this.value;
+        });
+        
+        // Update opacity text when slider is moved
+        document.getElementById('widgetOpacity').addEventListener('input', function() {
+          document.getElementById('widgetOpacityText').value = this.value;
+        });
+        
+        // Update opacity slider when text is changed
+        document.getElementById('widgetOpacityText').addEventListener('input', function() {
+          const value = parseFloat(this.value);
+          if (!isNaN(value) && value >= 0.2 && value <= 1.0) {
+            document.getElementById('widgetOpacity').value = value;
+          }
+        });
+
+        // Set up event listener for the Apply Changes button
+        document.getElementById('applyChanges').addEventListener('click', function() {
+          // Get all values from the form
+          const ringlet = document.getElementById('ringlet').value;
+          const color = document.getElementById('widgetColorText').value;
+          const opacity = parseFloat(document.getElementById('widgetOpacityText').value);
+          const widgetContent = document.getElementById('widgetContent').value;
+          const position = document.getElementById('widgetPosition').value;
+          const startCollapsed = document.getElementById('startCollapsed').checked;
+          
+          // Force a complete widget reset
+          document.querySelectorAll('.webring-widget, .webring-widget-container, [id^="webring"]').forEach(el => {
+            el.remove();
+          });
+          
+          // Create a fresh config object with form values
+          const newConfig = {
+            type: "box",
+            ringlet: ringlet || undefined,
+            color: color,
+            opacity: opacity,
+            widget_content: widgetContent || undefined,
+            position: position,
+            start_collapsed: startCollapsed
+          };
+          
+          // Update the widget config
+          widgetConfig = newConfig;
+          
+          // Debug: log the configuration
+          console.log("Applying widget configuration:", newConfig);
+          
+          // Completely reload the widget
+          reloadWidget(newConfig);
+        });
+      }
+      
+      // Initialize the widget when the DOM is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeForm();
+        
+        // Initial widget load
+        setTimeout(() => {
+          reloadWidget(widgetConfig);
+        }, 100);
       });
     </script>
-
 </body>
 </html>

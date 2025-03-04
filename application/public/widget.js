@@ -88,10 +88,9 @@
       console.warn(`Invalid position "${config.position}" for box widget, defaulting to "bottom-right"`);
       config.position = 'bottom-right';
     } else if (config.type === 'static') {
-      // For static widget, validate static_position and fixed_position
-      if (config.fixed_position && !['top', 'bottom'].includes(config.static_position)) {
-        console.warn(`Invalid static_position "${config.static_position}" for fixed static widget, defaulting to "bottom"`);
-        config.static_position = 'bottom';
+      // These options are deprecated for static widget
+      if (config.fixed_position || config.static_position !== 'inline') {
+        console.warn('The "fixed_position" and "static_position" options are deprecated for the static widget type. The widget will now appear where the script is placed in your HTML.');
       }
     }
     
@@ -1375,26 +1374,21 @@
     container.id = 'webring-widget';
     container.className = `webring-widget webring-widget-static ${config.full_width ? 'webring-widget-full-width' : ''}`;
     
-    if (config.static_position === 'inline') {
-      // If inline position, no additional classes needed
-    } else if (config.fixed_position) {
-      // If fixed position, add fixed class and position class
-      container.classList.add('webring-widget-fixed');
-      container.classList.add(`webring-widget-${config.static_position}`);
-    }
+    // Determine text color based on background color
+    const textColor = getTextColorForBackground(siteColor);
     
     // Calculate a random site that's not the current one
     const getRandomSite = () => {
-      // Get current URL
-      const currentUrl = detectCurrentSiteUrl();
-      
-      // Filter out the current site
-      const otherSites = allSites.filter(site => 
-        site.url.replace(/\/$/, '') !== currentUrl.replace(/\/$/, '')
-      );
-      
-      // Pick a random site
-      return otherSites[Math.floor(Math.random() * otherSites.length)];
+        // Get current URL
+        const currentUrl = detectCurrentSiteUrl();
+        
+        // Filter out the current site
+        const otherSites = allSites.filter(site => 
+            site.url.replace(/\/$/, '') !== currentUrl.replace(/\/$/, '')
+        );
+        
+        // Pick a random site
+        return otherSites[Math.floor(Math.random() * otherSites.length)];
     };
     
     // Prepare random site
@@ -1405,137 +1399,136 @@
     let ringletDisplayText;
     
     if (!ringlet.name) {
-      // Case 1: No ringlet specified
-      ringletLinkUrl = config.baseUrl;
-      ringletDisplayText = 'webring.fun';
+        // Case 1: No ringlet specified
+        ringletLinkUrl = config.baseUrl;
+        ringletDisplayText = 'webring.fun';
     } else if (ringlet.name && !ringlet.url) {
-      // Case 2: Ringlet specified but no URL
-      ringletLinkUrl = `${config.baseUrl}/?ringlet=${config.ringlet}`;
-      ringletDisplayText = `${ringlet.name} webring`;
+        // Case 2: Ringlet specified but no URL
+        ringletLinkUrl = `${config.baseUrl}/?ringlet=${config.ringlet}`;
+        ringletDisplayText = `${ringlet.name} webring`;
     } else {
-      // Case 3: Ringlet specified with URL
-      ringletLinkUrl = ringlet.url;
-      ringletDisplayText = `${ringlet.name} webring`;
+        // Case 3: Ringlet specified with URL
+        ringletLinkUrl = ringlet.url;
+        ringletDisplayText = `${ringlet.name} webring`;
     }
-    
-    console.log(`Widget display values: ringletLinkUrl=${ringletLinkUrl}, ringletDisplayText=${ringletDisplayText}`);
-    
-    // Determine text color based on background color
-    const textColor = getTextColorForBackground(siteColor);
     
     // Create tooltip HTML for each site
     const prevSiteTooltip = `
-      <div class="webring-widget-tooltip webring-widget-tooltip-prev">
-        <div class="webring-widget-tooltip-title">${prevSite.name}</div>
-        ${prevSite.description ? `<div class="webring-widget-tooltip-description">${prevSite.description}</div>` : ''}
-      </div>
+        <div class="webring-widget-tooltip webring-widget-tooltip-prev">
+            <div class="webring-widget-tooltip-title">${prevSite.name}</div>
+            ${prevSite.description ? `<div class="webring-widget-tooltip-description">${prevSite.description}</div>` : ''}
+        </div>
     `;
     
     const nextSiteTooltip = `
-      <div class="webring-widget-tooltip webring-widget-tooltip-next">
-        <div class="webring-widget-tooltip-title">${nextSite.name}</div>
-        ${nextSite.description ? `<div class="webring-widget-tooltip-description">${nextSite.description}</div>` : ''}
-      </div>
+        <div class="webring-widget-tooltip webring-widget-tooltip-next">
+            <div class="webring-widget-tooltip-title">${nextSite.name}</div>
+            ${nextSite.description ? `<div class="webring-widget-tooltip-description">${nextSite.description}</div>` : ''}
+        </div>
     `;
     
     const randomSiteTooltip = `
-      <div class="webring-widget-tooltip webring-widget-tooltip-random">
-        <div class="webring-widget-tooltip-title">Surprise me!</div>
-      </div>
+        <div class="webring-widget-tooltip webring-widget-tooltip-random">
+            <div class="webring-widget-tooltip-title">Surprise me!</div>
+        </div>
     `;
     
     // Create the widget description content
-    const widgetTitle = config.widget_content ? 
-      config.widget_content : 
-      `This site is a member of <a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>`;
+    const widgetDescription = config.widget_content ? 
+        config.widget_content : 
+        `This site is a member of ${ringlet.name ? 'the ' : ''}<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringletDisplayText}</a>!`;
     
-    // Create HTML content
+    // Create the widget title
+    const widgetTitle = ringlet.name ? 
+        `<a href="${ringletLinkUrl}" target="_blank" rel="noopener">${ringlet.name} Webring</a>` : 
+        `<a href="${ringletLinkUrl}" target="_blank" rel="noopener">Webring.fun</a>`;
+    
+    // Create content HTML based on extra_details setting
     let contentHTML;
     
     if (config.extra_details) {
-      contentHTML = `
-        <div class="webring-widget-static-content">
-          <div class="webring-widget-static-header">
-            <h3 class="webring-widget-static-title">
-              ${widgetTitle}
-            </h3>
-          </div>
-          <div class="webring-widget-static-sites">
-            <a href="${prevSite.url}" class="webring-widget-static-site webring-widget-static-prev" style="--hover-color: ${prevSite.color || siteColor}">
-              <span class="webring-widget-static-label">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                  <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-                </svg>
-                Previous
-              </span>
-              <div class="webring-widget-static-link-content">
-                <strong>${prevSite.name}</strong>
-                ${prevSite.description ? `<span class="webring-widget-static-description">${prevSite.description}</span>` : ''}
-              </div>
-              ${prevSiteTooltip}
-            </a>
-            <a href="${randomSite.url}" class="webring-widget-static-site webring-widget-static-random" style="--hover-color: ${randomSite.color || siteColor}">
-              <span class="webring-widget-static-label">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                  <path d="M14.83,13.41L13.42,14.82L16.55,17.95L14.5,20H20V14.5L17.96,16.54L14.83,13.41M14.5,4L16.54,6.04L4,18.59L5.41,20L17.96,7.46L20,9.5V4M10.59,9.17L5.41,4L4,5.41L9.17,10.58L10.59,9.17Z" />
-                </svg>
-                Random
-              </span>
-              <div class="webring-widget-static-link-content">
-                <strong>${randomSite.name}</strong>
-                ${randomSite.description ? `<span class="webring-widget-static-description">${randomSite.description}</span>` : ''}
-              </div>
-              ${randomSiteTooltip}
-            </a>
-            <a href="${nextSite.url}" class="webring-widget-static-site webring-widget-static-next" style="--hover-color: ${nextSite.color || siteColor}">
-              <span class="webring-widget-static-label">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                  <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
-                </svg>
-                Next
-              </span>
-              <div class="webring-widget-static-link-content">
-                <strong>${nextSite.name}</strong>
-                ${nextSite.description ? `<span class="webring-widget-static-description">${nextSite.description}</span>` : ''}
-              </div>
-              ${nextSiteTooltip}
-            </a>
-          </div>
-        </div>
-      `;
+        contentHTML = `
+            <div class="webring-widget-static-content">
+                <div class="webring-widget-static-header">
+                    <h3 class="webring-widget-static-title">
+                        ${widgetTitle}
+                    </h3>
+                </div>
+                <div class="webring-widget-static-sites">
+                    <a href="${prevSite.url}" class="webring-widget-static-site webring-widget-static-prev" style="--hover-color: ${prevSite.color || siteColor}">
+                        <span class="webring-widget-static-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                                <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                            </svg>
+                            Previous
+                        </span>
+                        <div class="webring-widget-static-link-content">
+                            <strong>${prevSite.name}</strong>
+                            ${prevSite.description ? `<span class="webring-widget-static-description">${prevSite.description}</span>` : ''}
+                        </div>
+                        ${prevSiteTooltip}
+                    </a>
+                    <a href="${randomSite.url}" class="webring-widget-static-site webring-widget-static-random" style="--hover-color: ${randomSite.color || siteColor}">
+                        <span class="webring-widget-static-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                                <path d="M14.83,13.41L13.42,14.82L16.55,17.95L14.5,20H20V14.5L17.96,16.54L14.83,13.41M14.5,4L16.54,6.04L4,18.59L5.41,20L17.96,7.46L20,9.5V4M10.59,9.17L5.41,4L4,5.41L9.17,10.58L10.59,9.17Z" />
+                            </svg>
+                            Random
+                        </span>
+                        <div class="webring-widget-static-link-content">
+                            <strong>${randomSite.name}</strong>
+                        </div>
+                        ${randomSiteTooltip}
+                    </a>
+                    <a href="${nextSite.url}" class="webring-widget-static-site webring-widget-static-next" style="--hover-color: ${nextSite.color || siteColor}">
+                        <span class="webring-widget-static-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                                <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                            </svg>
+                            Next
+                        </span>
+                        <div class="webring-widget-static-link-content">
+                            <strong>${nextSite.name}</strong>
+                            ${nextSite.description ? `<span class="webring-widget-static-description">${nextSite.description}</span>` : ''}
+                        </div>
+                        ${nextSiteTooltip}
+                    </a>
+                </div>
+            </div>
+        `;
     } else {
-      contentHTML = `
-        <div class="webring-widget-static-content">
-          <div class="webring-widget-static-header">
-            <h3 class="webring-widget-static-title">
-              ${widgetTitle}
-            </h3>
-          </div>
-          <div class="webring-widget-static-simple-nav">
-            <a href="${prevSite.url}" class="webring-widget-static-simple-button" title="Previous: ${prevSite.name}" style="--hover-color: ${prevSite.color || siteColor}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-              </svg>
-              Prev
-              ${prevSiteTooltip}
-            </a>
-            <a href="${randomSite.url}" class="webring-widget-static-simple-button" title="Random: ${randomSite.name}" style="--hover-color: ${randomSite.color || siteColor}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                <path d="M14.83,13.41L13.42,14.82L16.55,17.95L14.5,20H20V14.5L17.96,16.54L14.83,13.41M14.5,4L16.54,6.04L4,18.59L5.41,20L17.96,7.46L20,9.5V4M10.59,9.17L5.41,4L4,5.41L9.17,10.58L10.59,9.17Z" />
-              </svg>
-              Random
-              ${randomSiteTooltip}
-            </a>
-            <a href="${nextSite.url}" class="webring-widget-static-simple-button" title="Next: ${nextSite.name}" style="--hover-color: ${nextSite.color || siteColor}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
-                <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
-              </svg>
-              Next
-              ${nextSiteTooltip}
-            </a>
-          </div>
-        </div>
-      `;
+        contentHTML = `
+            <div class="webring-widget-static-content">
+                <div class="webring-widget-static-header">
+                    <h3 class="webring-widget-static-title">
+                        ${widgetTitle}
+                    </h3>
+                </div>
+                <div class="webring-widget-static-simple-nav">
+                    <a href="${prevSite.url}" class="webring-widget-static-simple-button" title="Previous: ${prevSite.name}" style="--hover-color: ${prevSite.color || siteColor}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                            <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                        </svg>
+                        Prev
+                        ${prevSiteTooltip}
+                    </a>
+                    <a href="${randomSite.url}" class="webring-widget-static-simple-button" title="Random: ${randomSite.name}" style="--hover-color: ${randomSite.color || siteColor}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                            <path d="M14.83,13.41L13.42,14.82L16.55,17.95L14.5,20H20V14.5L17.96,16.54L14.83,13.41M14.5,4L16.54,6.04L4,18.59L5.41,20L17.96,7.46L20,9.5V4M10.59,9.17L5.41,4L4,5.41L9.17,10.58L10.59,9.17Z" />
+                        </svg>
+                        Random
+                        ${randomSiteTooltip}
+                    </a>
+                    <a href="${nextSite.url}" class="webring-widget-static-simple-button" title="Next: ${nextSite.name}" style="--hover-color: ${nextSite.color || siteColor}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="webring-widget-icon">
+                            <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+                        </svg>
+                        Next
+                        ${nextSiteTooltip}
+                    </a>
+                </div>
+            </div>
+        `;
     }
     
     // Set container content
@@ -1544,16 +1537,19 @@
     // Add styles with dynamic colors
     addStaticWidgetStyles(siteColor, textColor);
     
-    // Add to the document
-    document.body.appendChild(container);
+    // Find the script tag that loaded this widget
+    const scriptTag = document.querySelector('script[id^="webring-"]');
+    
+    if (scriptTag) {
+        // Insert the widget after the script tag
+        scriptTag.parentNode.insertBefore(container, scriptTag.nextSibling);
+    } else {
+        // Fallback: append to body if script tag not found
+        document.body.appendChild(container);
+    }
     
     // Always make the widget visible initially
     container.classList.add('webring-widget-visible');
-    
-    // If the static widget is fixed-positioned at the top, add space
-    if (config.static_position === 'top' && config.fixed_position) {
-      adjustPageForTopWidget(container);
-    }
   }
   
   /**
@@ -1573,18 +1569,6 @@
     const styleEl = document.createElement('style');
     styleEl.id = 'webring-styles';
     
-    // Fixed position CSS
-    const fixedPositionCSS = config.fixed_position ? `
-      position: fixed;
-      ${config.static_position === 'top' ? 'top: 0;' : 'bottom: 0;'}
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      border-radius: 0;
-      ${config.static_position === 'top' ? 'border-top: none; border-left: none; border-right: none;' : 'border-bottom: none; border-left: none; border-right: none;'}
-      margin: 0;
-    ` : '';
-    
     // Define CSS
     styleEl.textContent = `
       .webring-widget-static {
@@ -1597,7 +1581,6 @@
         background-color: ${backgroundColor};
         margin: 20px 0;
         overflow: visible;
-        ${fixedPositionCSS}
       }
       
       .webring-widget-full-width {
