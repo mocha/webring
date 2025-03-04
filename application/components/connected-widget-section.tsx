@@ -59,4 +59,4 @@ export default function ConnectedWidgetSection() {
       </div>
     </div>
   )
-} 
+}
