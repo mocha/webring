@@ -1,0 +1,15 @@
+url: "https://birdbyrocket.com"
+name: "bird by rocket"
+description: "a personal site for writing experiments, blogging, blah-ing about books "
+owner: "birdbyrocket@gmail.com"
+owner_type: "email"
+color: "#0c885e"
+website_categories:
+  - "personal"
+  - "blog"
+  - "books"
+  - "writing"
+ringlets:
+  - "personal-sites"
+  - "diy-writing"
+  - "book-blog"
