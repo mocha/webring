@@ -1,0 +1,11 @@
+url: "https://swizzard.pizza"
+name: "sam raker's website"
+description: "a website by sam raker, computerist"
+owner: "@swizzard.pizza"
+owner_type: "Bluesky"
+color: "#228833"
+website_categories:
+  - "personal"
+  - "tech-writing"
+ringlets:
+  - "today-in-tabs"
