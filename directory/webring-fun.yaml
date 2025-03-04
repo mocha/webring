@@ -1,0 +1,9 @@
+url: "https://webring.fun"
+name: "🎉 webring.fun"
+description: "The modern 'ring. Fun, simple, easy to use, and utterly hackable. Join the social web!"
+owner: "@mocha"
+owner_type: "github"
+color: "#efefef"
+website_categories:
+    - "meta"
+    - "fun_web_projects"

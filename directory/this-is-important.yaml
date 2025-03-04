@@ -3,7 +3,7 @@ name: "This is Important"
 description: "A blog about tech writing, music, and data analysis."
 owner: "@smore"
 owner_type: "Bluesky"
-color: "#c73fd9"
+color: "#232B3A"
 website_categories:
   - "blog"
   - "music"

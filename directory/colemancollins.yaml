@@ -1,0 +1,10 @@
+url: "https://colemancollins.com"
+name: "Coleman Collins"
+description: "Coleman Collins is a designer, among other things."
+owner: "hello@colemancollins.com"
+owner_type: "email"
+color: "#ff0"
+website_categories:
+    - "fun_web_projects"
+    - "writing"
+    - "design"
