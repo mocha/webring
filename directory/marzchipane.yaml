@@ -1,0 +1,12 @@
+url: "https://marzchipane.com"
+name: "Marzchipane"
+description: "A miscellaneous hodgepodge of reviews, lists, favourites, poetry, experimental web stuff, and lists and lists and lists!"
+owner: "marzchipane@gmail.com"
+owner_type: "Email"
+color: "#005f8c"
+website_categories:
+  - "fun_web_projects"
+  - "personal_links"
+  - "photography"
+ringlets:
+
