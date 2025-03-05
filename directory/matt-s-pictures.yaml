@@ -1,0 +1,14 @@
+url: "https://matt.pictures"
+name: "Matt's Pictures"
+description: "Some photos, some writing. "
+owner: "photomattmills"
+owner_type: "bluesky"
+color: "#496387"
+website_categories:
+  - "personal"
+  - "blog"
+  - "photography"
+  - "art"
+  - "writing"
+ringlets:
+  - "Tabscord"
