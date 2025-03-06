@@ -1,0 +1,11 @@
+url: "https://www.kaerecomputer.dk/"
+name: "Kære Computer"
+description: "A personal blog site with infrequent posts about technology, teaching computer science classes, learning and building inclusive communities."
+owner: "https://github.com/nynnejc"
+owner_type: "Github"
+color: "#f280df"
+website_categories:
+  - "blog"
+  - "tech-writing"
+ringlets:
+
