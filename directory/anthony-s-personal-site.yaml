@@ -1,0 +1,13 @@
+url: "https://prestia.org"
+name: "Anthony's Personal Site"
+description: "A personal site where I share projects — software, car repair, 3D printing, etc."
+owner: "@prestia.bsky.social"
+owner_type: "Bluesky"
+color: "#d357fe"
+website_categories:
+  - "personal"
+  - "fun_web_projects"
+  - "personal_links"
+  - "art"
+ringlets:
+  - "today-in-tabs"
