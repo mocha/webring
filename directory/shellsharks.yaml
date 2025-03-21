@@ -1,0 +1,16 @@
+url: "https://shellsharks.com"
+name: "Shellsharks"
+description: "Shellsharks is a blog, an IndieWeb site, a community, and a central point-of-presence on the web. Topics include all things Infosec, Technology and Life in general."
+owner: "mike@shellsharks.com"
+owner_type: "Email"
+color: "#ca3342"
+website_categories:
+  - "personal"
+  - "blog"
+  - "infosec"
+  - "technology"
+  - "life"
+  - "indieweb"
+  - "socialweb"
+ringlets:
+
