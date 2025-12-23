@@ -1,0 +1,15 @@
+url: "https://brennan.day"
+name: "Brennan.Day"
+description: "An a11y-friendly 11ty personal site about writing, tech, culture, and identity. Full of easter eggs!"
+owner: "mail@brennanbrown.ca"
+owner_type: "email"
+color: "#e4d52e"
+website_categories:
+  - "blog"
+  - "writing"
+  - "tech-writing"
+  - "personal"
+  - "life"
+  - "meta"
+ringlets:
+
