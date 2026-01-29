@@ -1,0 +1,14 @@
+url: "https://burgeonlab.com"
+name: "Burgeon Lab"
+description: "A public logbook where I document my *mostly* geeky interests like: open source, digital rights/privacy, Hugo webdev, homelabbing, and sharing tech how-tos."
+owner: "https://fosstodon.org/@eclecticpassions"
+owner_type: "Mastodon"
+color: "#e24613"
+website_categories:
+  - "blog"
+  - "indieweb"
+  - "personal"
+  - "tech-writing"
+  - "technology"
+ringlets:
+
