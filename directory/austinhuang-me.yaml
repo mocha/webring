@@ -1,0 +1,13 @@
+url: "https://austinhuang.me"
+name: "AustinHuang.me"
+description: "Just another personal site with an absurdly long personal introduction"
+owner: "@austin@mstdn.party"
+owner_type: "Mastodon"
+color: "#0085ca"
+website_categories:
+  - "personal"
+  - "technology"
+  - "socialweb"
+  - "life"
+ringlets:
+
