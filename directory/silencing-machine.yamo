@@ -1,0 +1,14 @@
+url: "https://silencingmachine.org/"
+name: "silencing machine"
+description: "Personal site for xtalBiskit (crystal biscuit), a north american human. It's not a blog, but it's not *not* a blog. "
+owner: "xtalBiskit@protonmail.com"
+owner_type: "Email"
+color: "#50b4d4"
+website_categories:
+  - "writing"
+  - "personal"
+  - "life"
+  - "blog"
+  - "pixel-art"
+ringlets:
+  - "personal-sites"
