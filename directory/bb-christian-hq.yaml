@@ -1,0 +1,12 @@
+url: "https://bbchristian.neocities.org/"
+name: "BB Christian HQ"
+description: "The Official Website of BB Christian"
+owner: "BB Christian (@itzbbchristian)"
+owner_type: "YouTube"
+color: "#008cff"
+website_categories:
+  - "indieweb"
+  - "personal"
+  - "personal_links"
+ringlets:
+  - "today-in-tabs"
