@@ -1,0 +1,14 @@
+url: "https://projectbench.io"
+name: "The Bench"
+description: "This is a quiet place on the web.
+A real-time, shared virtual space where strangers gather, coexist and simply be. Built with presence and poetry in mind.
+I always wanted to express myself through art and technology. The bench is not a game. There's no goal, no need to perform, speak or entertain."
+owner: "akmatoff"
+owner_type: "github"
+color: "#4f4f4f"
+website_categories:
+  - "art"
+  - "environment"
+  - "personal"
+ringlets:
+  - "today-in-tabs"
