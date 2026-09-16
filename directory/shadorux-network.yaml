@@ -1,0 +1,13 @@
+url: "https://shadorux.dev"
+name: "Shadorux Network"
+description: "Independent Shadow the Hedgehog fan network with news, archives, resources, references, web tools, and indie-web experiments."
+owner: "https://shadorux.dev"
+owner_type: "Website"
+color: "#d71920"
+website_categories:
+  - "fansite"
+  - "gaming"
+  - "indieweb"
+  - "archive"
+  - "web-tools"
+ringlets:
