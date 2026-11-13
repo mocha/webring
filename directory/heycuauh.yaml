@@ -1,0 +1,13 @@
+url: "https://heycuauh.com/"
+name: "Ctrl + Cuauh"
+description: "Artwork, interesting finds, and ongoing projects."
+owner: "@heycuauh.com"
+owner_type: "Bluesky"
+color: "#ac8cff"
+website_categories:
+    - "art"
+    - "blog"
+    - "foss"
+    - "indieweb"
+    - "fun_web_projects"
+ringlets:
